@@ -1,4 +1,4 @@
-import { Logo } from '@atoms/Logo';
+import { Logo } from '../atoms/Logo';
 import React, { ReactNode } from 'react';
 
 export interface TextProps {
@@ -36,15 +36,16 @@ export const Text = ({
   };
 
   return (
-    <>
+    <div className='flex gap-2 items-center '>
+      {logo && <Logo alt={alt || 'Logo'} src={logo} width={width} height={height} className="rounded-full" />}
+
       {textType === 'ref' ? (
         <a
           href={href}
-          className={`flex gap-2 items-center ${color} ${sizes[size]}`}
+          className={`${color} ${sizes[size]}`}
           target={target}
           {...props}
         >
-          {logo && <Logo alt={alt || 'Logo'} src={logo} width={width} height={height} className="rounded-full" />}
           {children}
         </a>
       ) : (
@@ -55,6 +56,6 @@ export const Text = ({
           {children}
         </p>
       )}
-    </>
+    </div>
   );
 };
