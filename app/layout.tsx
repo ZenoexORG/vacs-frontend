@@ -4,8 +4,10 @@ import '@mantine/notifications/styles.css';
 
 import "./globals.css";
 
+import React from "react";
 import { createTheme, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import { ThemeProvider } from "@contexts/themeContext";
 
 export const metadata: Metadata = {
   title: "VACS",
@@ -23,10 +25,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <MantineProvider theme={theme}>
-          <Notifications />
-          {children}
-        </MantineProvider>
+        <ThemeProvider>
+          <MantineProvider theme={theme}>
+            <Notifications />
+            {children}
+          </MantineProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

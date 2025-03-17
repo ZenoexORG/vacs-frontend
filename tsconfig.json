@@ -19,7 +19,13 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@contexts/*": ["./contexts/*"],
+      "@components/*": ["./components/*"],
+      "@hooks/*": ["./hooks/*"],
+
+      "@atoms/*": ["./stories/atoms/*"],
+      "@molecules/*": ["./stories/molecules/*"],
+      "@organisms/*": ["./stories/organisms/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

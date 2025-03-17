@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        "hero": "url('/assets/images/utb.webp')",
+      },
       fontFamily: {
         'nunito': ["Nunito Sans", "sans-serif"],
       },
