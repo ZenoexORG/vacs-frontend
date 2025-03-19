@@ -1,35 +1,28 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { headerPageMenu, PageMenu, footerPageMenu } from "../../menu"; // Ajusta la ruta
+import { Aside } from "./Aside";
 
-import { Aside } from './Aside';
-
-const meta = {
-  title: 'Organisms/Aside',
+const meta: Meta<typeof Aside> = {
+  title: "Organisms/Aside",
   component: Aside,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
-} satisfies Meta<typeof Aside>;
+  parameters: { layout: "fullscreen" },
+  tags: ["autodocs"],
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Aside>;
 
-export const Primary: Story = {
+export const Default: Story = {
   args: {
+    menuData: { ...headerPageMenu, ...PageMenu, ...footerPageMenu },
+    isDark: false,
   },
 };
 
-export const Secondary: Story = {
+export const DarkMode: Story = {
   args: {
+    menuData: { ...headerPageMenu, ...PageMenu, ...footerPageMenu },
+    isDark: true,
   },
 };
 
-export const Large: Story = {
-  args: {
-  },
-};
-
-export const Small: Story = {
-  args: {
-  },
-};

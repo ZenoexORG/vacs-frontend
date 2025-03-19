@@ -8,6 +8,7 @@ import React from "react";
 import { createTheme, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { ThemeProvider } from "@contexts/themeContext";
+import { DefaultAside } from "@components/DefaultAside";
 
 export const metadata: Metadata = {
   title: "VACS",
@@ -28,7 +29,14 @@ export default function RootLayout({
         <ThemeProvider>
           <MantineProvider theme={theme}>
             <Notifications />
-            {children}
+
+            <main className="flex items-center">
+              <DefaultAside />
+
+              <div className="h-screen w-full">
+                {children}
+              </div>
+            </main>
           </MantineProvider>
         </ThemeProvider>
       </body>

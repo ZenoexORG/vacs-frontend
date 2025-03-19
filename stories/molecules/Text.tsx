@@ -5,8 +5,10 @@ export interface TextProps {
   isDark?: boolean;
   textType?: string;
   href?: string;
-  size?: 'small' | 'medium' | 'large';
+  isNav?: boolean;
+  size?: 'small' | 'medium' | 'large' | 'smallest';
   logo?: string;
+  isSelect?: boolean;
   height?: number;
   width?: number;
   alt?: string;
@@ -18,8 +20,10 @@ export const Text = ({
   isDark = false,
   textType = 'normal',
   size = 'medium',
+  isNav = false,
   logo,
   height,
+  isSelect,
   width,
   href,
   alt,
@@ -27,35 +31,57 @@ export const Text = ({
   children,
   ...props
 }: TextProps) => {
-  const color = textType === 'ref' ? 'text-primary-400 duration-500 hover:text-primary-600' : isDark ? 'text-white-200' : 'text-black-800';
+  // Color base con hover dinámico
+  const baseColor =
+    textType === 'ref'
+      ? 'text-primary-400 hover:text-primary-600'
+      : isDark
+        ? 'text-white-200'
+        : 'text-black-800 group-hover:text-white-50';
 
+  // Estilos condicionales
+  const styles =
+    isNav && isSelect
+      ? 'font-bold text-white-50'
+      : isDark
+        ? 'font-bold text-white-50'
+        : 'font-bold text-black-950 group-hover:text-white-50';
+
+  // Tamaños de texto
   const sizes = {
+    smallest: 'text-xs',
     small: 'text-sm',
     medium: '',
     large: 'text-lg',
   };
 
   return (
-    <div className='flex gap-2 items-center '>
-      {logo && <Logo alt={alt || 'Logo'} src={logo} width={width} height={height} className="rounded-full" />}
+    <div className="flex gap-2 items-center">
+      {logo && (
+        <Logo
+          alt={alt || 'Logo'}
+          src={logo}
+          width={width}
+          height={height}
+          className="rounded-full"
+        />
+      )}
 
       {textType === 'ref' ? (
         <a
           href={href}
-          className={`${color} ${sizes[size]}`}
+          className={`${baseColor} ${sizes[size]} ${styles}`}
           target={target}
           {...props}
         >
           {children}
         </a>
       ) : (
-        <p
-          className={`${color} ${sizes[size]}`}
-          {...props}
-        >
+        <p className={`${baseColor} ${sizes[size]} ${styles}`} {...props}>
           {children}
         </p>
       )}
     </div>
   );
 };
+

@@ -6,6 +6,7 @@ export interface LogoProps {
   src: string;
   width?: number;
   height?: number;
+  className?: string;
 }
 
 export const Logo = ({
@@ -13,7 +14,7 @@ export const Logo = ({
   src,
   width,
   height,
-  ...props
+  className,
 }: LogoProps) => {
   return (
     <Image
@@ -21,7 +22,7 @@ export const Logo = ({
       src={src}
       width={width}
       height={height}
-      {...props}
+      className={className}
     />
   );
 };
