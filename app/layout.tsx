@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
+"use client";
+
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
-
 import "./globals.css";
 
 import React from "react";
@@ -9,33 +9,23 @@ import { createTheme, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { ThemeProvider } from "@contexts/themeContext";
 import { DefaultAside } from "@components/DefaultAside";
+import { usePathname } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "VACS",
-  description: "VACS is a software for managing vehicle access",
-};
+const theme = createTheme({});
 
-const theme = createTheme({
-});
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isAuthPage = pathname.startsWith("/auth");
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
   return (
     <html lang="en">
       <body>
         <ThemeProvider>
           <MantineProvider theme={theme}>
             <Notifications />
-
             <main className="flex items-center">
-              <DefaultAside />
-
-              <div className="h-screen w-full">
-                {children}
-              </div>
+              {!isAuthPage && <DefaultAside />}
+              <div className="h-screen w-full">{children}</div>
             </main>
           </MantineProvider>
         </ThemeProvider>

@@ -77,7 +77,7 @@ export const Text = ({
           {children}
         </a>
       ) : (
-        <p className={`${baseColor} ${sizes[size]} ${styles}`} {...props}>
+        <p className={`duration-500 ease-in-out ${baseColor} ${sizes[size]} ${styles}`} {...props}>
           {children}
         </p>
       )}
