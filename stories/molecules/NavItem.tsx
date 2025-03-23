@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Text } from './Text';
 import * as MuiIcons from "@mui/icons-material";
+import { Title } from '@atoms/Title';
 
 export interface NavItemProps {
   isDark?: boolean;
@@ -26,7 +26,7 @@ export const NavItem = ({ isDark = false, isSelect = false, label, icon, onClick
 
       <div className={`w-full px-5 py-3 rounded-lg flex gap-5 items-center ${bgColor}`}>
         {IconComponent && <IconComponent fontSize="medium" className={textColor} />}
-        <Text isDark={isDark} isSelect={isSelect} size="smallest" isNav>{label}</Text>
+        <Title isDark={isDark} isSelect={isSelect} size="smallest" isNav>{label}</Title>
       </div>
     </div>
   );

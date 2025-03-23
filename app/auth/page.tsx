@@ -7,8 +7,9 @@ import { Button } from "@atoms/Button";
 import { Checkbox } from "@atoms/Checkbox";
 import { Label } from "@atoms/Label";
 import { Input } from "@molecules/Input";
-import { Text } from "@molecules/Text";
+import { Text } from "@atoms/Text";
 import { Logo } from "@atoms/Logo";
+import { Link } from "@molecules/Link";
 
 export default function Auth() {
   const { isDark } = useTheme();
@@ -79,7 +80,7 @@ export default function Auth() {
                   <Label isDark={isDark} htmlFor="remember" label="Remember me" />
                 </div>
 
-                <Text textType="ref" href="#" size="small">Forgot password?</Text>
+                <Link textType="ref" href="#" size="small">Forgot password?</Link>
               </div>
 
               <Button isSubmit isDark={isDark} label="Sign in" />
@@ -88,7 +89,7 @@ export default function Auth() {
         </div>
 
         <div className="flex justify-between items-center">
-          <Text
+          <Link
             textType="ref"
             logo="/assets/icons/zenoex.png"
             alt="ZenoexORG"
@@ -97,7 +98,7 @@ export default function Auth() {
             href="https://github.com/ZenoexORG"
           >
             @ZenoexORG
-          </Text>
+          </Link>
 
           <Text isDark={isDark}>© 2025 ZenoexORG</Text>
         </div>

@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { Title } from './Title';
 
-import { Text } from './Text';
 
 const meta = {
-  title: 'Molecules/Text',
-  component: Text,
+  title: 'Atoms/Title',
+  component: Title,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof Text>;
+} satisfies Meta<typeof Title>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
