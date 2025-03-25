@@ -23,7 +23,7 @@ export const Header = ({
     <header className={`${color} w-full flex items-center justify-end px-9 py-3`}>
       <div className="flex gap-9 items-center">
         <Link href="/" className="flex items-center justify-center">
-          <Notification isDark={isDark} number={number} />
+          <Notification number={number} />
         </Link>
 
         <User

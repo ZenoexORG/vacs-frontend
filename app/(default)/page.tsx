@@ -103,7 +103,7 @@ export default function Dashboard() {
         </div>
 
         <AreaChart
-          className="h-80 w-full"
+          className="h-60 w-full"
           data={data}
           dataKey="date"
           series={[{ name: 'Apples', color: 'indigo.6' }]}

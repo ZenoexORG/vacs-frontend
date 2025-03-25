@@ -2,16 +2,12 @@ import { Notifications } from '@mui/icons-material';
 import React from 'react';
 
 export interface NotificationProps {
-  isDark?: boolean;
   number?: number;
 }
 
 export const Notification = ({
-  isDark = false,
   number,
 }: NotificationProps) => {
-  const color = isDark ? 'text-dark-900' : 'text-white-50';
-
   const transform =
     number && number < 10
       ? 'translate-x-1'
@@ -28,7 +24,7 @@ export const Notification = ({
       {number && number > 0 ? (
         <p className={`
           absolute top-0 right-0 px-2 py-1
-          ${color} text-xs font-bold text-center
+          text-white-50 text-xs font-bold text-center
           bg-action-error rounded-full
           transform ${transform} -translate-y-1/5
         `}>
