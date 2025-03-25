@@ -1,21 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { NavItem } from './NavItem';
+import { Card } from './Card';
 
 const meta = {
-  title: 'Molecules/NavItem',
-  component: NavItem,
+  title: 'Atoms/Card',
+  component: Card,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof NavItem>;
+} satisfies Meta<typeof Card>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    icon: 'Dashboard',
-    to: '/dashboard',
+
   },
 };

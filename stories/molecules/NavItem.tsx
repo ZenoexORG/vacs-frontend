@@ -3,6 +3,7 @@
 import React from 'react';
 import * as MuiIcons from "@mui/icons-material";
 import { Title } from '@atoms/Title';
+import Link from 'next/link';
 
 export interface NavItemProps {
   isDark?: boolean;
@@ -10,9 +11,17 @@ export interface NavItemProps {
   label?: string;
   icon?: string;
   onClick?: () => void;
+  to: string;
 }
 
-export const NavItem = ({ isDark = false, isSelect = false, label, icon, onClick }: NavItemProps) => {
+export const NavItem = ({
+  isDark = false,
+  isSelect = false,
+  label,
+  icon,
+  onClick,
+  to,
+}: NavItemProps) => {
   const baseTextColor = isDark ? "text-white-50" : "text-black-950";
   const hoverTextColor = isSelect ? "text-white-50" : "group-hover:text-white-50";
   const textColor = `${baseTextColor} ${hoverTextColor}`;
@@ -21,13 +30,15 @@ export const NavItem = ({ isDark = false, isSelect = false, label, icon, onClick
   const IconComponent = icon ? MuiIcons[icon as keyof typeof MuiIcons] : null;
 
   return (
-    <div className="group flex gap-6 items-stretch mr-6 cursor-pointer" onClick={onClick}>
-      <div className={`w-2 rounded-r-lg ${bgColor}`}></div>
+    <Link href={to}>
+      <div className="group flex gap-6 items-stretch mr-6 cursor-pointer" onClick={onClick}>
+        <div className={`w-2 rounded-r-lg ${bgColor}`}></div>
 
-      <div className={`w-full px-5 py-3 rounded-lg flex gap-5 items-center ${bgColor}`}>
-        {IconComponent && <IconComponent fontSize="medium" className={textColor} />}
-        <Title isDark={isDark} isSelect={isSelect} size="smallest" isNav>{label}</Title>
+        <div className={`w-full px-5 py-3 rounded-lg flex gap-5 items-center ${bgColor}`}>
+          {IconComponent && <IconComponent fontSize="medium" className={textColor} />}
+          <Title isDark={isDark} isSelect={isSelect} size="smallest" isNav>{label}</Title>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };

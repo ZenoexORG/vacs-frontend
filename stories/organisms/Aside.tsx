@@ -20,18 +20,34 @@ export const Aside = ({ menuData, isDark = false, selectedId, onSelect }: AsideP
 
       <div className="w-full flex flex-col h-full justify-between">
         <div className="w-full">
-          {Object.values(menuData.header).map((item) => (
-            <NavItem key={item.id} isDark={isDark} label={item.text} icon={item.icon} isSelect={selectedId === item.id} onClick={() => onSelect(item.id)} />
+          {Object.values(menuData.header).map((item: any) => (
+            <NavItem
+              to={item.path}
+              key={item.id}
+              isDark={isDark}
+              label={item.text}
+              icon={item.icon}
+              isSelect={selectedId === item.id}
+              onClick={() => onSelect(item.id)}
+            />
           ))}
 
-          {Object.values(menuData.main).map((section) => (
+          {Object.values(menuData.main).map((section: any) => (
             <div key={section.id} className="w-full">
               <Divider isDark={isDark} />
               <h1 className="py-3 text-xs pl-12 ml-1 uppercase">{section.text}</h1>
 
               <div>
-                {Object.values(section.subMenu).map((subItem) => (
-                  <NavItem key={subItem.id} isDark={isDark} label={subItem.text} icon={subItem.icon} isSelect={selectedId === subItem.id} onClick={() => onSelect(subItem.id)} />
+                {Object.values(section.subMenu).map((subItem: any) => (
+                  <NavItem
+                    to={subItem.path}
+                    key={subItem.id}
+                    isDark={isDark}
+                    label={subItem.text}
+                    icon={subItem.icon}
+                    isSelect={selectedId === subItem.id}
+                    onClick={() => onSelect(subItem.id)}
+                  />
                 ))}
               </div>
             </div>
@@ -41,8 +57,16 @@ export const Aside = ({ menuData, isDark = false, selectedId, onSelect }: AsideP
         <div className="w-full">
           <Divider isDark={isDark} />
           <div className="pt-3">
-            {Object.values(menuData.footer).map((item) => (
-              <NavItem key={item.id} isDark={isDark} label={item.text} icon={item.icon} isSelect={selectedId === item.id} onClick={() => onSelect(item.id)} />
+            {Object.values(menuData.footer).map((item: any) => (
+              <NavItem
+                to={item.path}
+                key={item.id}
+                isDark={isDark}
+                label={item.text}
+                icon={item.icon}
+                isSelect={selectedId === item.id}
+                onClick={() => onSelect(item.id)}
+              />
             ))}
           </div>
         </div>

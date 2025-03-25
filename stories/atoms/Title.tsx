@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 export interface TitleProps {
   isDark?: boolean;
   isNav?: boolean;
-  size?: 'small' | 'medium' | 'large' | 'smallest';
+  size?: 'small' | 'medium' | 'large' | 'smallest' | 'largest' | '2xl' | '3xl';
   isSelect?: boolean;
   children?: ReactNode;
 }
@@ -16,11 +16,6 @@ export const Title = ({
   children,
   ...props
 }: TitleProps) => {
-  const baseColor =
-    isDark
-      ? 'text-white-200'
-      : 'text-black-800 group-hover:text-white-50';
-
   const styles =
     isNav && isSelect
       ? 'font-bold text-white-50'
@@ -33,10 +28,13 @@ export const Title = ({
     small: 'text-sm',
     medium: '',
     large: 'text-lg',
+    largest: 'text-xl',
+    '2xl': 'text-2xl',
+    '3xl': 'text-3xl',
   };
 
   return (
-    <h2 className={`duration-500 ease-in-out ${baseColor} ${sizes[size]} ${styles}`} {...props}>
+    <h2 className={`${sizes[size]} ${styles}`} {...props}>
       {children}
     </h2>
   );

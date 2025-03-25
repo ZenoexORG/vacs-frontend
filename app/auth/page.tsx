@@ -83,7 +83,7 @@ export default function Auth() {
                 <Link textType="ref" href="#" size="small">Forgot password?</Link>
               </div>
 
-              <Button isSubmit isDark={isDark} label="Sign in" />
+              <Button size="medium" isSubmit isDark={isDark} label="Sign in" />
             </form>
           </div>
         </div>
