@@ -10,6 +10,7 @@ export interface ButtonProps {
   children?: React.ReactNode;
   onClick?: () => void;
   isOutline?: boolean;
+  className?: string;
 }
 
 export const Button = ({
@@ -21,7 +22,7 @@ export const Button = ({
   type = 'button',
   label,
   children,
-  ...props
+  className,
 }: ButtonProps) => {
   const bgColor =
     isSubmit
@@ -47,8 +48,7 @@ export const Button = ({
   return (
     <button
       type={type}
-      className={`flex items-center justify-center gap-3 rounded-md duration-500 font-bold ${sizes[size]} ${bgColor}`}
-      {...props}
+      className={`flex items-center justify-center gap-3 rounded-md duration-500 font-bold ${sizes[size]} ${bgColor} ${className}`}
     >
       {label || children}
     </button>
