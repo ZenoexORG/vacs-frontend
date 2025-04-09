@@ -3,14 +3,16 @@
 import { Title } from "@atoms/Title";
 import { useTheme } from "@contexts/themeContext";
 import { Table } from "@organisms/Table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { Button } from "@atoms/Button";
 import Form from "./form";
+import { Role } from "../../../types/roles";
+import Deleting from "@components/modals/Deleting";
 
 const columns = [
   { key: 'name', label: 'Name' },
-  { key: 'type', label: 'Type', type: 'badge', badgeColorMap: { 'Software': '#00B69B', 'UTB': '#857238' } },
+  { key: 'type', label: 'Type', type: 'badge', badgeColorMap: { 'software': '#00B69B', 'utb': '#FFA756' } },
   { key: 'permissions', label: 'Permissions' },
   { key: 'color', label: 'Color' },
   { key: 'actions', label: 'Actions' },
@@ -18,62 +20,34 @@ const columns = [
 
 const data = [
   {
+    _id: '1',
     name: 'Admin',
-    type: 'Software',
+    type: 'software',
     permissions: [
-      { category: 'Users', actions: ['Create', 'Read', 'Write', 'Delete'] },
-      { category: 'Access Logs', actions: ['Read'] },
-      { category: 'Settings', actions: ['Read', 'Write'] },
+      "users:create",
+      "users:read",
+      "users:write",
+      "users:delete",
+      "access-log:view",
+      "incidents:read",
+      "incidents:edit",
     ],
     color: '#739163',
   },
   {
-    name: 'Admin',
-    type: 'Software',
+    _id: '2',
+    name: 'Cleaner',
+    type: 'utb',
     permissions: [
-      { category: 'Users', actions: ['Create', 'Read', 'Write', 'Delete'] },
-      { category: 'Access Logs', actions: ['Read'] },
-      { category: 'Settings', actions: ['Read', 'Write'] },
-    ],
-    color: '#739163',
-  },
-  {
-    name: 'Admin',
-    type: 'Software',
-    permissions: [
-      { category: 'Users', actions: ['Create', 'Read', 'Write', 'Delete'] },
-      { category: 'Access Logs', actions: ['Read'] },
-      { category: 'Settings', actions: ['Read', 'Write'] },
-    ],
-    color: '#739163',
-  },
-  {
-    name: 'Admin',
-    type: 'Software',
-    permissions: [
-      { category: 'Users', actions: ['Create', 'Read', 'Write', 'Delete'] },
-      { category: 'Access Logs', actions: ['Read'] },
-      { category: 'Settings', actions: ['Read', 'Write'] },
-    ],
-    color: '#739163',
-  },
-  {
-    name: 'Admin',
-    type: 'Software',
-    permissions: [
-      { category: 'Users', actions: ['Create', 'Read', 'Write', 'Delete'] },
-      { category: 'Access Logs', actions: ['Read'] },
-      { category: 'Settings', actions: ['Read', 'Write'] },
-    ],
-    color: '#739163',
-  },
-  {
-    name: 'Admin',
-    type: 'Software',
-    permissions: [
-      { category: 'Users', actions: ['Create', 'Read', 'Write', 'Delete'] },
-      { category: 'Access Logs', actions: ['Read'] },
-      { category: 'Settings', actions: ['Read', 'Write'] },
+      "dashboard:view",
+      "employees:view",
+      "employees:edit",
+      "employees:create",
+      "users:view",
+      "users:edit",
+      "roles:view",
+      "roles:edit",
+      "roles:create",
     ],
     color: '#739163',
   },
@@ -83,19 +57,31 @@ export default function Roles() {
   const { isDark } = useTheme();
 
   const [viewForm, setViewForm] = useState(false);
+  const [element, setElement] = useState<string>('');
+  const [toDelete, setToDelete] = useState(false);
 
   const formData = useForm({
-    mode: 'uncontrolled',
-
     initialValues: {
       name: '',
       type: '',
       permissions: [],
       color: '',
     },
-
-
   });
+
+  const handleEdit = (item: any) => {
+    formData.setValues(item);
+    setViewForm(true);
+  };
+
+  const handleDelete = (item: Role) => {
+    setToDelete(true);
+    setElement(item._id);
+  };
+
+  useEffect(() => {
+    console.log(element);
+  }, [element]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -111,8 +97,25 @@ export default function Roles() {
 
       {viewForm
         ? <Form formData={formData} setViewForm={setViewForm} />
-        : <Table data={data} columns={columns} isDark={isDark} />
+        : <Table
+          data={data}
+          columns={columns}
+          isDark={isDark}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       }
+
+      {toDelete && (
+        <Deleting
+          isOpen={toDelete}
+          onClose={() => setToDelete(false)}
+          onDelete={() => {
+            setToDelete(false);
+          }}
+          itemName={element}
+        />
+      )}
     </div>
   );
 }

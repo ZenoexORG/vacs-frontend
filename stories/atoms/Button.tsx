@@ -23,6 +23,7 @@ export const Button = ({
   label,
   children,
   className,
+  onClick,
 }: ButtonProps) => {
   const bgColor =
     isSubmit
@@ -49,6 +50,7 @@ export const Button = ({
     <button
       type={type}
       className={`flex items-center justify-center gap-3 rounded-md duration-500 font-bold ${sizes[size]} ${bgColor} ${className}`}
+      onClick={onClick}
     >
       {label || children}
     </button>

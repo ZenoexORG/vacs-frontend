@@ -3,6 +3,7 @@
 import { DualButton } from '@atoms/DualButton';
 import { TableRow } from '@molecules/TableRow';
 import React, { useState } from 'react';
+import { Role } from '../../types/roles';
 
 export interface TableProps {
   data: Record<string, string | null>[];
@@ -13,10 +14,11 @@ export interface TableProps {
     badgeColorMap?: Record<string, string>;
   }[];
   isDark?: boolean;
-
+  onEdit?: (item: any) => void;
+  onDelete?: (item: Role) => void;
 }
 
-export const Table = ({ data, columns, isDark = false }: TableProps) => {
+export const Table = ({ data, columns, isDark = false, onEdit, onDelete }: TableProps) => {
   const bgColor = isDark ? 'bg-dark-900' : 'bg-black-50';
   const textColor = isDark ? 'text-white-50' : 'text-black-950';
 
@@ -27,10 +29,6 @@ export const Table = ({ data, columns, isDark = false }: TableProps) => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
-  const startIndex = (currentPage - 1) * 6;
-  const endIndex = startIndex + 6;
-  const currentData = data.slice(startIndex, endIndex);
 
   return (
     <div className='flex flex-col h-full justify-between'>
@@ -48,7 +46,14 @@ export const Table = ({ data, columns, isDark = false }: TableProps) => {
 
           <tbody>
             {data.map((row, index) => (
-              <TableRow key={index} data={row} columns={columns} isDark={isDark} />
+              <TableRow
+                key={index}
+                data={row}
+                columns={columns}
+                isDark={isDark}
+                onEdit={() => onEdit?.(row)}
+                onDelete={() => onDelete?.(row)}
+              />
             ))}
           </tbody>
         </table>

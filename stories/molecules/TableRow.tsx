@@ -14,9 +14,11 @@ export interface TableRowProps {
     badgeColorMap?: Record<string, string>;
   }[];
   isDark?: boolean;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
-export const TableRow = ({ data, columns, isDark = false }: TableRowProps) => {
+export const TableRow = ({ data, columns, isDark = false, onEdit, onDelete }: TableRowProps) => {
   const bgColor = isDark ? 'bg-dark-800' : 'bg-white-50';
   const textColor = isDark ? 'text-white-50' : 'text-black-950';
 
@@ -35,27 +37,39 @@ export const TableRow = ({ data, columns, isDark = false }: TableRowProps) => {
             />
           );
         } else if (col.key === 'permissions' && Array.isArray(data[col.key])) {
-          const formattedPermissions = data[col.key].map((item: any) => {
-            const category = item.category.charAt(0).toUpperCase() + item.category.slice(1).toLowerCase();
-            const actions = item.actions.map((perm: string) => perm.charAt(0).toUpperCase() + perm.slice(1).toLowerCase()).join(', ');
-            return `${category}: ${actions}`;
+          const groupedPermissions: Record<string, Set<string>> = {};
+
+          data[col.key].forEach((perm: string) => {
+            const [category, action] = perm.split(':');
+            if (!groupedPermissions[category]) {
+              groupedPermissions[category] = new Set();
+            }
+            groupedPermissions[category].add(action);
           });
-          const categoriesCount = data[col.key].length - 1;
-          content =
+
+          const categories = Object.keys(groupedPermissions);
+          const firstCategory = categories[0];
+
+          const formattedCategory = firstCategory.charAt(0).toUpperCase() + firstCategory.slice(1).toLowerCase();
+          const formattedActions = Array.from(groupedPermissions[firstCategory])
+            .map((action) => action.charAt(0).toUpperCase() + action.slice(1).toLowerCase())
+            .join(', ');
+
+          const remainingCategoriesCount = categories.length - 1;
+
+          content = (
             <>
-              {formattedPermissions[0]}
-              {categoriesCount > 0 && (
-                <span className='text-action-success'>
-                  {' '}
-                  [+{categoriesCount} Categories]
-                </span>
+              {formattedCategory}: {formattedActions}
+              {remainingCategoriesCount > 0 && (
+                <span className='text-action-success'> [+{remainingCategoriesCount} Categories]</span>
               )}
             </>
+          );
         } else if (col.key === 'actions') {
           content = (
             <DualButton
-              leftAction={() => console.log('Edit')}
-              rightAction={() => console.log('Delete')}
+              leftAction={onEdit}
+              rightAction={onDelete}
               leftIcon={<ModeEdit className='text-action-warning' />}
               rightIcon={<Delete className='text-action-error' />}
               isDark={isDark}

@@ -14,6 +14,13 @@ const hexToRGBA = (hex: string, alpha: number) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
+
+function toTitleCase(str: string): string {
+  return str
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
 export const Badge = ({
   isDark = false,
   size = 'medium',
@@ -36,7 +43,7 @@ export const Badge = ({
       style={{ backgroundColor: bgColor, color: textColor }}
       {...props}
     >
-      {label}
+      {label === 'utb' ? label.toUpperCase() : toTitleCase(label || '')}
     </span>
   );
 };
