@@ -18,6 +18,16 @@ export interface TableRowProps {
   onDelete?: () => void;
 }
 
+const formatDate = (dateStr: string) => {
+  const [day, month, year] = dateStr.split('-');
+  const date = new Date(`${year}-${month}-${day}`);
+  return date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
 export const TableRow = ({ data, columns, isDark = false, onEdit, onDelete }: TableRowProps) => {
   const bgColor = isDark ? 'bg-dark-800' : 'bg-white-50';
   const textColor = isDark ? 'text-white-50' : 'text-black-950';
@@ -65,6 +75,12 @@ export const TableRow = ({ data, columns, isDark = false, onEdit, onDelete }: Ta
               )}
             </>
           );
+        } else if (col.key === 'soat') {
+          content = (
+            <>
+              {formatDate(data[col.key])}
+            </>
+          )
         } else if (col.key === 'actions') {
           content = (
             <DualButton
