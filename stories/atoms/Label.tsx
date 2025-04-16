@@ -9,6 +9,13 @@ export interface LabelProps {
   onClick?: () => void;
 }
 
+function toCamelCase(text: string) {
+  return text
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
 export const Label = ({
   isDark = false,
   size = 'medium',
@@ -31,7 +38,7 @@ export const Label = ({
       className={`pl-5 ${color} ${sizes[size]}`}
       {...props}
     >
-      {label}
+      {toCamelCase(label || '')}
     </label>
   );
 };

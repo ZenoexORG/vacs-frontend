@@ -12,6 +12,11 @@ export interface SelectProps {
   children: ReactNode;
 }
 
+function toTitleCase(str: string): string {
+  const cleaned = str.replace(/[-_]/g, ' ').toLowerCase();
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+}
+
 export const Select = ({
   isDark = false,
   label,
@@ -50,7 +55,7 @@ export const Select = ({
           {...props}
         >
           {placeholder && (
-            <Option label={placeholder} value="" isDark={isDark} />
+            <Option label={toTitleCase(placeholder)} value="" isDark={isDark} />
           )}
           {children}
         </select>

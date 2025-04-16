@@ -7,23 +7,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { Button } from "@atoms/Button";
 import Form from "./form";
-import { Role } from "../../../types/roles";
+import { Role } from "../../../../types/roles";
 import Deleting from "@components/modals/Deleting";
-
-const columns = [
-  { key: 'id', label: 'Id' },
-  { key: 'username', label: 'Username' },
-  { key: 'first_name', label: 'Name' },
-  { key: 'last_name', label: 'Last Name' },
-  {
-    key: 'role', label: 'Role', type: 'badge',
-    badgeColorMap: {
-      'admin': '#00B69B',
-      'security': '#EF3826',
-    }
-  },
-  { key: 'actions', label: 'Actions' },
-];
+import { useT } from "../../../i18n/useT";
 
 const data = [
   {
@@ -84,6 +70,24 @@ const data = [
 
 export default function Vehicles() {
   const { isDark } = useTheme();
+  const { t } = useT('employee');
+
+  const columns = [
+    { key: 'id', label: t('id') },
+    { key: 'username', label: t('username') },
+    { key: 'first_name', label: t('first_name') },
+    { key: 'last_name', label: t('last_name') },
+    {
+      key: 'role',
+      label: t('role'),
+      type: 'badge',
+      badgeColorMap: {
+        admin: '#00B69B',
+        security: '#EF3826',
+      },
+    },
+    { key: 'actions', label: t('actions') },
+  ];
 
   const [viewForm, setViewForm] = useState(false);
   const [element, setElement] = useState<string>('');
@@ -117,11 +121,13 @@ export default function Vehicles() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <Title size="3xl" isDark={isDark}>{viewForm ? 'Create Employee' : 'Employees'}</Title>
+        <Title size="3xl" isDark={isDark}>
+          {viewForm ? t('create_employee') : t('employees')}
+        </Title>
 
         {!viewForm && (
           <Button onClick={() => setViewForm(true)} isDark={isDark} isSubmit>
-            Add New
+            {t('add_new')}
           </Button>
         )}
       </div>

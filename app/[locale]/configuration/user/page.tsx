@@ -7,71 +7,78 @@ import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { Button } from "@atoms/Button";
 import Form from "./form";
-import { Role } from "../../../types/roles";
+import { Role } from "../../../../types/roles";
 import Deleting from "@components/modals/Deleting";
-
-const columns = [
-  { key: 'license_plate', label: 'Id' },
-  { key: 'type', label: 'Type', type: 'badge', badgeColorMap: { 'authorized': '#00B69B', 'visitor': '#FFA756' } },
-  { key: 'soat', label: 'Soat' },
-  { key: 'user_id', label: 'User Id' },
-  { key: 'user_name', label: 'User Name' },
-  { key: 'actions', label: 'Actions' },
-];
+import { useT } from "../../../i18n/useT";
 
 const data = [
   {
     _id: '1',
-    license_plate: 'VKS-250',
-    type: 'authorized',
-    soat: '25-10-2022',
-    user_id: '123456789',
-    user_name: 'John Doe'
+    first_name: 'John Alex',
+    last_name: 'Doe Smith',
+    id: '123456789',
+    role: 'admin',
   },
   {
     _id: '2',
-    license_plate: 'MWP-123',
-    type: 'visitor',
-    soat: '01-09-2026',
-    user_id: '987654321',
-    user_name: 'Jane Smith'
+    first_name: 'Jane Paul',
+    last_name: 'Smith Doe',
+    id: '987654321',
+    role: 'security',
   },
   {
     _id: '3',
-    license_plate: 'ABC-456',
-    type: 'authorized',
-    soat: '15-05-2023',
-    user_id: '456789123',
-    user_name: 'Alice Johnson'
+    first_name: 'Alice Marie',
+    last_name: 'Johnson Doe',
+    id: '456789123',
+    role: 'professor',
   },
   {
     _id: '4',
-    license_plate: 'XYZ-789',
-    type: 'visitor',
-    soat: '10-12-2025',
-    user_id: '321654987',
-    user_name: 'Bob Brown'
+    first_name: 'Bob Lee',
+    last_name: 'Brown Doe',
+    id: '321654987',
+    role: 'student',
   },
   {
     _id: '5',
-    license_plate: 'LMN-234',
-    type: 'visitor',
-    soat: '20-03-2024',
-    user_id: '654321987',
-    user_name: 'Charlie Green'
+    first_name: 'Charlie Ray',
+    last_name: 'Davis Doe',
+    id: '654321987',
+    role: 'worker',
   },
   {
     _id: '6',
-    license_plate: 'OPQ-567',
-    type: 'authorized',
-    soat: '30-06-2027',
-    user_id: '789123456',
-    user_name: 'Diana White'
+    first_name: 'David James',
+    last_name: 'Wilson Doe',
+    id: '789123456',
+    role: 'assistant',
   }
 ];
 
 export default function Vehicles() {
   const { isDark } = useTheme();
+  const { t } = useT('user');
+
+  const columns = [
+    { key: 'id', label: t('id') },
+    { key: 'first_name', label: t('first_name') },
+    { key: 'last_name', label: t('last_name') },
+    {
+      key: 'role',
+      label: t('role'),
+      type: 'badge',
+      badgeColorMap: {
+        'admin': '#00B69B',
+        'security': '#EF3826',
+        'professor': '#FFA756',
+        'student': '#6226EF',
+        'worker': '#C1009E',
+        'assistant': '#01CAD1'
+      }
+    },
+    { key: 'actions', label: t('actions') },
+  ];
 
   const [viewForm, setViewForm] = useState(false);
   const [element, setElement] = useState<string>('');
@@ -79,10 +86,10 @@ export default function Vehicles() {
 
   const formData = useForm({
     initialValues: {
-      license_plate: '',
-      type: '',
-      user_id: '',
-      soat: '',
+      first_name: '',
+      last_name: '',
+      id: '',
+      role: '',
     },
   });
 
@@ -103,11 +110,13 @@ export default function Vehicles() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <Title size="3xl" isDark={isDark}>{viewForm ? 'Create Vehicle' : 'Vehicles'}</Title>
+        <Title size="3xl" isDark={isDark}>
+          {viewForm ? t('create_user') : t('users')}
+        </Title>
 
         {!viewForm && (
           <Button onClick={() => setViewForm(true)} isDark={isDark} isSubmit>
-            Add New
+            {t('add_new')}
           </Button>
         )}
       </div>

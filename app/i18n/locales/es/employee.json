@@ -1,0 +1,21 @@
+{
+  "create_employee": "Crear Empleado",
+  "employees": "Empleados",
+  "add_new": "Agregar Nuevo",
+
+  "id": "Id",
+  "username": "Usuario",
+  "first_name": "Nombre",
+  "last_name": "Apellido",
+  "role": "Rol",
+  "actions": "Acciones",
+
+  "identification": "Identificación",
+  "password": "Contraseña",
+
+  "enter": "Ingresar",
+  "select": "Seleccionar",
+
+  "submit": "Enviar",
+  "cancel": "Cancelar"
+}

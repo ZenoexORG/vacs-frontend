@@ -5,6 +5,7 @@ import { useTheme } from "@contexts/themeContext";
 import { Input } from "@molecules/Input";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useT } from "../../app/i18n/useT";
 
 interface PermissionProps {
 	isOpen: boolean;
@@ -36,6 +37,7 @@ export default function Permission({
 	togglePermission,
 }: PermissionProps) {
 	const { isDark } = useTheme();
+	const { t } = useT('role');
 
 	useEffect(() => {
 		const handleKey = (e: KeyboardEvent) => {
@@ -55,7 +57,7 @@ export default function Permission({
 		<div className="fixed inset-0 bg-black-950/50 z-50 flex items-center justify-center">
 			<Card size="large" isDark={isDark} className="w-2/3">
 				<Title isDark={isDark} size="3xl">
-					Permissions Manager
+					{t('permissions_manager')}
 				</Title>
 
 				<div className="grid grid-cols-3 gap-10">
@@ -63,12 +65,13 @@ export default function Permission({
 						{groupedModules.map((module) => (
 							<div key={module.name} className="flex flex-col gap-5">
 								<Title isDark={isDark} size="small">
-									{toTitleCase(module.name)}
+									{toTitleCase(t(`modules.${module.name}`))}
 								</Title>
 
 								<div className="grid grid-cols-2 gap-5">
 									{module.perms.map((perm) => {
 										const value = `${module.name}:${perm}`;
+
 										return (
 											<label key={value} className="flex items-center gap-2 cursor-pointer">
 												<Input
@@ -76,7 +79,7 @@ export default function Permission({
 													checked={permissions.includes(value)}
 													onChange={() => togglePermission(value)}
 												/>
-												<span className="capitalize">{perm}</span>
+												<span className="capitalize">{t(`permission.${perm}`)}</span>
 											</label>
 										);
 									})}
@@ -89,7 +92,7 @@ export default function Permission({
 						{regularModules.map((module) => (
 							<div key={module.name} className="flex flex-col gap-5">
 								<Title isDark={isDark} size="small">
-									{toTitleCase(module.name)}
+									{toTitleCase(t(`modules.${module.name}`))}
 								</Title>
 
 								<div className="grid grid-cols-2 gap-5">
@@ -102,7 +105,7 @@ export default function Permission({
 													checked={permissions.includes(value)}
 													onChange={() => togglePermission(value)}
 												/>
-												<span className="capitalize">{perm}</span>
+												<span className="capitalize">{t(`permission.${perm}`)}</span>
 											</label>
 										);
 									})}
@@ -113,8 +116,8 @@ export default function Permission({
 				</div>
 
 				<div className="flex items-center justify-between *:w-1/3 gap-14">
-					<Button isCancel label="Cancel" isDark={isDark} onClick={onClose} />
-					<Button isSubmit label="Submit" type="submit" onClick={onClose} />
+					<Button isCancel label={t('cancel')} isDark={isDark} onClick={onClose} />
+					<Button isSubmit label={t('submit')} type="submit" onClick={onClose} />
 				</div>
 			</Card>
 		</div>,

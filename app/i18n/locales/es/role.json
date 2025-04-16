@@ -1,0 +1,37 @@
+{
+  "create_role": "Crear Rol",
+  "roles": "Roles",
+  "add_new": "Agregar Nuevo",
+
+  "name": "Nombre",
+  "type": "Tipo",
+  "permissions": "Permisos",
+  "color": "Color",
+  "actions": "Acciones",
+
+  "enter": "Ingresar",
+  "select": "Seleccionar",
+  "click_to": "Haga clic para",
+
+  "submit": "Enviar",
+  "cancel": "Cancelar",
+
+  "permissions_manager": "Gestor de Permisos",
+
+  "modules": {
+    "dashboard": "Dashboard",
+    "employees": "Empleados",
+    "users": "Usuarios",
+    "access-log": "Registro de Acceso",
+    "vehicles": "Vehiculos",
+    "roles": "Roles",
+    "incidents": "Incidentes"
+  },
+
+  "permission": {
+    "view": "Ver",
+    "edit": "Editar",
+    "create": "Crear",
+    "delete": "Eliminar"
+  }
+}

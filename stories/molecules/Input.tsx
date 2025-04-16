@@ -13,6 +13,11 @@ export interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+function toTitleCase(str: string): string {
+  const cleaned = str.replace(/[-_]/g, ' ').toLowerCase();
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+}
+
 export const Input = ({
   isDark = false,
   label,
@@ -59,7 +64,7 @@ export const Input = ({
       type={type}
       id={id}
       name={id}
-      placeholder={placeholder}
+      placeholder={toTitleCase(placeholder || "")}
       onChange={onChange}
       onClick={onClick}
       className={`px-5 py-3 rounded-md ${color} appearance-none w-full`}

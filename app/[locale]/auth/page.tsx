@@ -10,10 +10,12 @@ import { Input } from "@molecules/Input";
 import { Text } from "@atoms/Text";
 import { Logo } from "@atoms/Logo";
 import { Link } from "@molecules/Link";
+import { useT } from "../../i18n/useT";
 
 export default function Auth() {
   const { isDark } = useTheme();
   const [remember, setRemember] = useState(false);
+  const { t } = useT("auth");
 
   return (
     <div className={`flex justify-between items-center ${isDark ? 'bg-dark-950' : 'bg-white-50'}`}>
@@ -61,29 +63,29 @@ export default function Auth() {
           />
 
           <div className="flex flex-col gap-5">
-            <h1 className="text-xl font-bold">Nice to see you again</h1>
+            <h1 className="text-xl font-bold">{t("welcome")}</h1>
 
             <form className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <Label isDark={isDark} htmlFor="email" label="Email" />
-                <Input isDark={isDark} type="email" id="email" placeholder="Enter your email" />
+                <Label isDark={isDark} htmlFor="email" label={t("email")} />
+                <Input isDark={isDark} type="email" id="email" placeholder={t("emailPlaceholder")} />
               </div>
 
               <div className="flex flex-col gap-2">
-                <Label isDark={isDark} htmlFor="password" label="Password" />
-                <Input isDark={isDark} type="password" id="password" placeholder="Enter your password" />
+                <Label isDark={isDark} htmlFor="password" label={t("password")} />
+                <Input isDark={isDark} type="password" id="password" placeholder={t("passwordPlaceholder")} />
               </div>
 
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
-                  <Checkbox isDark={isDark} id="remeber" checked={remember} onChange={setRemember} />
-                  <Label isDark={isDark} htmlFor="remember" label="Remember me" />
+                  <Checkbox isDark={isDark} id="remember" checked={remember} onChange={setRemember} />
+                  <Label isDark={isDark} htmlFor="remember" label={t("remember")} />
                 </div>
 
-                <Link textType="ref" href="#" size="small">Forgot password?</Link>
+                <Link textType="ref" href="#" size="small">{t("forgot")}</Link>
               </div>
 
-              <Button size="medium" isSubmit isDark={isDark} label="Sign in" />
+              <Button size="medium" isSubmit isDark={isDark} label={t("signin")} />
             </form>
           </div>
         </div>

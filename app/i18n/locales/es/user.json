@@ -1,0 +1,19 @@
+{
+  "create_user": "Crear Usuario",
+  "users": "Usuarios",
+  "add_new": "Agregar Nuevo",
+
+  "id": "Id",
+  "first_name": "Nombre",
+  "last_name": "Apellido",
+  "role": "Rol",
+  "actions": "Acciones",
+
+  "identification": "Identificación",
+
+  "enter": "Ingresar",
+  "select": "Seleccionar",
+
+  "submit": "Enviar",
+  "cancel": "Cancelar"
+}

@@ -3,15 +3,7 @@
 import { Title } from "@atoms/Title";
 import { useTheme } from "@contexts/themeContext";
 import { Table } from "@organisms/Table";
-
-const columns = [
-  { key: 'id', label: 'ID' },
-  { key: 'entryDate', label: 'Entry Date' },
-  { key: 'exitDate', label: 'Exit Date' },
-  { key: 'vehicleId', label: 'Vehicle ID' },
-  { key: 'type', label: 'Type', type: 'badge', badgeColorMap: { 'car': '#578215', 'truck': '#857238', 'bike': '#985423' } },
-  { key: 'userId', label: 'User ID' },
-];
+import { useT } from "../../i18n/useT";
 
 const data = [
   {
@@ -31,10 +23,31 @@ const data = [
 
 export default function AccessLog() {
   const { isDark } = useTheme();
+  const { t } = useT('access_log');
+
+  const columns = [
+    { key: 'id', label: t('id') },
+    { key: 'entryDate', label: t('entry_date') },
+    { key: 'exitDate', label: t('exit_date') },
+    { key: 'vehicleId', label: t('vehicle_id') },
+    {
+      key: 'type',
+      label: t('type'),
+      type: 'badge',
+      badgeColorMap: {
+        'car': '#578215',
+        'truck': '#857238',
+        'bike': '#985423'
+      }
+    },
+    { key: 'userId', label: t('user_id') },
+  ];
 
   return (
     <div className="flex flex-col gap-6">
-      <Title size="3xl" isDark={isDark}>Access Log</Title>
+      <Title size="3xl" isDark={isDark}>
+        {t('access_log')}
+      </Title>
 
       <Table data={data} columns={columns} isDark={isDark} />
     </div>

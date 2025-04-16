@@ -1,0 +1,9 @@
+{
+  "dashboard": "Dashboard",
+
+  "total_vehicles": "Vehiculos Totales",
+  "total_incidents": "Incidentes Totales",
+
+  "from_last_month": "del mes pasado",
+  "monthly_traffic": "Trafico Mensual"
+}

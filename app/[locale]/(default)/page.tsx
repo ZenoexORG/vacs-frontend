@@ -8,6 +8,7 @@ import { Title } from "@atoms/Title";
 import { useTheme } from "@contexts/themeContext";
 import { AreaChart } from "@mantine/charts";
 import { KeyboardArrowDown, TrendingDown, TrendingUp } from "@mui/icons-material";
+import { useT } from "../../i18n/useT";
 
 const data = [
   {
@@ -44,29 +45,32 @@ const data = [
   },
 ];
 
-const stats = [
-  {
-    title: 'Total Vehicles',
-    value: '1,200',
-    percent: ['8.5%', 'up'],
-    color: '#6226EF',
-    icon: 'DirectionsCar',
-  },
-  {
-    title: 'Total Incidents',
-    value: '200',
-    percent: ['4.3%', 'down'],
-    color: '#FFA756',
-    icon: 'Error',
-  },
-];
-
 export default function Dashboard() {
   const { isDark } = useTheme();
+  const { t } = useT('dashboard');
+
+  const stats = [
+    {
+      title: t('total_vehicles'),
+      value: '1,200',
+      percent: ['8.5%', 'up'],
+      color: '#6226EF',
+      icon: 'DirectionsCar',
+    },
+    {
+      title: t('total_incidents'),
+      value: '200',
+      percent: ['4.3%', 'down'],
+      color: '#FFA756',
+      icon: 'Error',
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-6">
-      <Title size="3xl" isDark={isDark}>Dashboard</Title>
+      <Title size="3xl" isDark={isDark}>
+        {t('dashboard')}
+      </Title>
 
       <div className="grid grid-cols-4 gap-6">
         {stats.map((stat, index) => (
@@ -86,7 +90,7 @@ export default function Dashboard() {
                   ? <TrendingUp fontSize="small" />
                   : <TrendingDown fontSize="small" />
                 } {stat.percent[0]}
-              </span> from last month
+              </span> {t('from_last_month')}
             </Title>
           </Card>
         ))}
@@ -94,7 +98,9 @@ export default function Dashboard() {
 
       <Card isDark={isDark} space={6}>
         <div className="flex justify-between items-center">
-          <Title size="largest" isDark={isDark}>Vehicle Details</Title>
+          <Title size="largest" isDark={isDark}>
+            {t('monthly_traffic')}
+          </Title>
 
           <Button size="small" isDark={isDark} isOutline>
             <p>October</p>

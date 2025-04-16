@@ -5,6 +5,7 @@ import { Option } from "@atoms/Option";
 import { useTheme } from "@contexts/themeContext";
 import { Input } from "@molecules/Input";
 import { Select } from "@molecules/Select";
+import { useT } from "../../../i18n/useT";
 
 interface FormProps {
   formData: any;
@@ -13,6 +14,7 @@ interface FormProps {
 
 export default function Form({ formData, setViewForm }: FormProps) {
   const { isDark } = useTheme();
+  const { t } = useT('user');
 
   console.log(formData.values);
   const onCancel = () => {
@@ -31,46 +33,46 @@ export default function Form({ formData, setViewForm }: FormProps) {
       <form className="flex flex-col gap-14">
         <div className="grid grid-cols-2 gap-14">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="first_name" label="First Name" isDark={isDark} />
+            <Label htmlFor="first_name" label={t('first_name')} isDark={isDark} />
             <Input
               isDark={isDark}
               id="first_name"
               type="text"
-              placeholder="Enter first name"
+              placeholder={`${t('enter')} ${t('first_name')}`}
               {...formData.getInputProps("first_name")}
               onCard
             />
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label htmlFor="last_name" label="Last Name" isDark={isDark} />
+            <Label htmlFor="last_name" label={t('last_name')} isDark={isDark} />
             <Input
               isDark={isDark}
               id="last_name"
-              placeholder="Enter last name"
+              placeholder={`${t('enter')} ${t('last_name')}`}
               {...formData.getInputProps("last_name")}
               onCard
             />
           </div>
 
           <div className="flex flex-col gap-3 relative">
-            <Label htmlFor="id" label="Identification" isDark={isDark} />
+            <Label htmlFor="id" label={t('identification')} isDark={isDark} />
             <Input
               isDark={isDark}
               id="id"
               type="text"
-              placeholder="Enter identification"
+              placeholder={`${t('enter')} ${t('identification')}`}
               {...formData.getInputProps("id")}
               onCard
             />
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label htmlFor="role" label="Role" isDark={isDark} />
+            <Label htmlFor="role" label={t('role')} isDark={isDark} />
             <Select
               isDark={isDark}
               id="role"
-              placeholder="Select role"
+              placeholder={`${t('select')} ${t('role')}`}
               {...formData.getInputProps("role")}
               onCard
             >
@@ -78,35 +80,11 @@ export default function Form({ formData, setViewForm }: FormProps) {
               <Option label="Security" value="security" isDark={isDark} />
             </Select>
           </div>
-
-          <div className="flex flex-col gap-3 relative">
-            <Label htmlFor="username" label="Username" isDark={isDark} />
-            <Input
-              isDark={isDark}
-              id="username"
-              type="text"
-              placeholder="Enter username"
-              {...formData.getInputProps("username")}
-              onCard
-            />
-          </div>
-
-          <div className="flex flex-col gap-3 relative">
-            <Label htmlFor="password" label="Password" isDark={isDark} />
-            <Input
-              isDark={isDark}
-              id="password"
-              type="password"
-              placeholder="Enter password"
-              {...formData.getInputProps("password")}
-              onCard
-            />
-          </div>
         </div>
 
         <div className="flex items-center justify-between *:w-1/3 gap-14">
-          <Button isCancel label="Cancel" isDark={isDark} onClick={onCancel} />
-          <Button isSubmit label="Submit" type="submit" onClick={handleSubmit} />
+          <Button isCancel label={t('cancel')} isDark={isDark} onClick={onCancel} />
+          <Button isSubmit label={t('submit')} type="submit" onClick={handleSubmit} />
         </div>
       </form>
     </Card>

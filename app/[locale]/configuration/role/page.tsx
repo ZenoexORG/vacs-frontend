@@ -7,16 +7,11 @@ import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { Button } from "@atoms/Button";
 import Form from "./form";
-import { Role } from "../../../types/roles";
+import { Role } from "../../../../types/roles";
 import Deleting from "@components/modals/Deleting";
+import { useT } from "../../../i18n/useT";
 
-const columns = [
-  { key: 'name', label: 'Name' },
-  { key: 'type', label: 'Type', type: 'badge', badgeColorMap: { 'software': '#00B69B', 'utb': '#FFA756' } },
-  { key: 'permissions', label: 'Permissions' },
-  { key: 'color', label: 'Color' },
-  { key: 'actions', label: 'Actions' },
-];
+
 
 const data = [
   {
@@ -55,6 +50,23 @@ const data = [
 
 export default function Roles() {
   const { isDark } = useTheme();
+  const { t } = useT('role');
+
+  const columns = [
+    { key: 'name', label: t('name') },
+    {
+      key: 'type',
+      label: t('type'),
+      type: 'badge',
+      badgeColorMap: {
+        'software': '#00B69B',
+        'utb': '#FFA756'
+      }
+    },
+    { key: 'permissions', label: t('permissions') },
+    { key: 'color', label: t('color') },
+    { key: 'actions', label: t('actions') },
+  ];
 
   const [viewForm, setViewForm] = useState(false);
   const [element, setElement] = useState<string>('');
@@ -86,11 +98,13 @@ export default function Roles() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <Title size="3xl" isDark={isDark}>{viewForm ? 'Create Role' : 'Roles'}</Title>
+        <Title size="3xl" isDark={isDark}>
+          {viewForm ? t('create_role') : t('roles')}
+        </Title>
 
         {!viewForm && (
           <Button onClick={() => setViewForm(true)} isDark={isDark} isSubmit>
-            Add New
+            {t('add_new')}
           </Button>
         )}
       </div>

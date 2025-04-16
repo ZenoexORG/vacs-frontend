@@ -5,6 +5,7 @@ import { Option } from "@atoms/Option";
 import { useTheme } from "@contexts/themeContext";
 import { Input } from "@molecules/Input";
 import { Select } from "@molecules/Select";
+import { useT } from "../../../i18n/useT";
 
 interface FormProps {
   formData: any;
@@ -13,6 +14,7 @@ interface FormProps {
 
 export default function Form({ formData, setViewForm }: FormProps) {
   const { isDark } = useTheme();
+  const { t } = useT('vehicle');
 
   console.log(formData.values);
   const onCancel = () => {
@@ -31,23 +33,23 @@ export default function Form({ formData, setViewForm }: FormProps) {
       <form className="flex flex-col gap-14">
         <div className="grid grid-cols-2 gap-14">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="license_plate" label="License Plate" isDark={isDark} />
+            <Label htmlFor="license_plate" label={t('license_plate')} isDark={isDark} />
             <Input
               isDark={isDark}
               id="license_plate"
               type="text"
-              placeholder="Enter license plate"
+              placeholder={`${t('enter')} ${t('license_plate')}`}
               {...formData.getInputProps("license_plate")}
               onCard
             />
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label htmlFor="type" label="Type" isDark={isDark} />
+            <Label htmlFor="type" label={t('type')} isDark={isDark} />
             <Select
               isDark={isDark}
               id="type"
-              placeholder="Select type"
+              placeholder={`${t('select')} ${t('type')}`}
               {...formData.getInputProps("type")}
               onCard
             >
@@ -57,11 +59,11 @@ export default function Form({ formData, setViewForm }: FormProps) {
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label htmlFor="user_id" label="User ID" isDark={isDark} />
+            <Label htmlFor="user_id" label={t('user_id')} isDark={isDark} />
             <Select
               isDark={isDark}
               id="user_id"
-              placeholder="Select user"
+              placeholder={`${t('select')} ${t('user_id')}`}
               {...formData.getInputProps("user_id")}
               onCard
             >
@@ -76,7 +78,7 @@ export default function Form({ formData, setViewForm }: FormProps) {
               isDark={isDark}
               id="soat"
               type="date"
-              placeholder="Enter SOAT"
+              placeholder={`${t('enter')} SOAT`}
               {...formData.getInputProps("soat")}
               onCard
             />
@@ -84,8 +86,8 @@ export default function Form({ formData, setViewForm }: FormProps) {
         </div>
 
         <div className="flex items-center justify-between *:w-1/3 gap-14">
-          <Button isCancel label="Cancel" isDark={isDark} onClick={onCancel} />
-          <Button isSubmit label="Submit" type="submit" onClick={handleSubmit} />
+          <Button isCancel label={t('cancel')} isDark={isDark} onClick={onCancel} />
+          <Button isSubmit label={t('submit')} type="submit" onClick={handleSubmit} />
         </div>
       </form>
     </Card>

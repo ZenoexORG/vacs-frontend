@@ -1,0 +1,19 @@
+{
+  "create_user": "Create User",
+  "users": "Users",
+  "add_new": "Add New",
+
+  "id": "Id",
+  "first_name": "First Name",
+  "last_name": "Last Name",
+  "role": "Role",
+  "actions": "Actions",
+
+  "identification": "Identification",
+
+  "enter": "Enter",
+  "select": "Select",
+
+  "submit": "Submit",
+  "cancel": "Cancel"
+}
