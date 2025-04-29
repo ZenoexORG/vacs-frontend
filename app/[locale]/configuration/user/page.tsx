@@ -7,105 +7,98 @@ import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { Button } from "@atoms/Button";
 import Form from "./form";
-import { Role } from "../../../../types/roles";
 import Deleting from "@components/modals/Deleting";
 import { useT } from "../../../i18n/useT";
+import { Role } from "../../../../types/roles";
+import { User } from "../../../../types/users";
+import UserAPI from "@hooks/configuration/user/user";
+import RoleAPI from "@hooks/configuration/role/role";
 
-const data = [
-  {
-    _id: '1',
-    first_name: 'John Alex',
-    last_name: 'Doe Smith',
-    id: '123456789',
-    role: 'admin',
-  },
-  {
-    _id: '2',
-    first_name: 'Jane Paul',
-    last_name: 'Smith Doe',
-    id: '987654321',
-    role: 'security',
-  },
-  {
-    _id: '3',
-    first_name: 'Alice Marie',
-    last_name: 'Johnson Doe',
-    id: '456789123',
-    role: 'professor',
-  },
-  {
-    _id: '4',
-    first_name: 'Bob Lee',
-    last_name: 'Brown Doe',
-    id: '321654987',
-    role: 'student',
-  },
-  {
-    _id: '5',
-    first_name: 'Charlie Ray',
-    last_name: 'Davis Doe',
-    id: '654321987',
-    role: 'worker',
-  },
-  {
-    _id: '6',
-    first_name: 'David James',
-    last_name: 'Wilson Doe',
-    id: '789123456',
-    role: 'assistant',
-  }
-];
-
-export default function Vehicles() {
+export default function Page() {
   const { isDark } = useTheme();
   const { t } = useT('user');
 
+  const [data, setData] = useState<User[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [loading, setLoading] = useState(true);
+
+  const [viewForm, setViewForm] = useState(false);
+  const [deletingItem, setDeletingItem] = useState<User | null>(null);
+
+  const limit = 6;
+
+  const formData = useForm({
+    initialValues: {
+      id: '',
+      kind_id: '',
+      name: '',
+      last_name: '',
+      gender: '',
+      role_id: '',
+    },
+  });
+
   const columns = [
     { key: 'id', label: t('id') },
-    { key: 'first_name', label: t('first_name') },
+    { key: 'name', label: t('name') },
     { key: 'last_name', label: t('last_name') },
     {
       key: 'role',
       label: t('role'),
-      type: 'badge',
-      badgeColorMap: {
-        'admin': '#00B69B',
-        'security': '#EF3826',
-        'professor': '#FFA756',
-        'student': '#6226EF',
-        'worker': '#C1009E',
-        'assistant': '#01CAD1'
-      }
+      type: 'badge'
     },
     { key: 'actions', label: t('actions') },
   ];
 
-  const [viewForm, setViewForm] = useState(false);
-  const [element, setElement] = useState<string>('');
-  const [toDelete, setToDelete] = useState(false);
+  const fetchData = async (pageToFetch = 1) => {
+    setLoading(true);
 
-  const formData = useForm({
-    initialValues: {
-      first_name: '',
-      last_name: '',
-      id: '',
-      role: '',
-    },
-  });
+    try {
+      const response = await UserAPI.list(pageToFetch, limit);
+      setData(response.data);
+      setPage(response.meta.page);
+      setTotalPages(response.meta.total_pages);
+    } catch (error) {
+      console.error('Error fetching users', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-  const handleEdit = (item: any) => {
-    formData.setValues(item);
+  const fetchRoles = async () => {
+    try {
+      const response = await RoleAPI.list(1, 100);
+      setRoles(response.data);
+    } catch (error) {
+      console.error('Error fetching roles', error);
+    }
+  };
+
+  const handleEdit = (role: Role) => {
+    formData.setValues(role);
     setViewForm(true);
   };
 
-  const handleDelete = (item: Role) => {
-    setToDelete(true);
-    setElement(item._id);
+  const handleDelete = async () => {
+    if (!deletingItem) return;
+
+    try {
+      await UserAPI.delete(deletingItem.id);
+      setDeletingItem(null);
+      fetchData(page);
+    } catch (error) {
+      console.error('Error deleting role', error);
+    }
   };
 
   useEffect(() => {
-    console.log(element);
-  }, [element]);
+    fetchData();
+    fetchRoles();
+  }, []);
 
   return (
     <div className="flex flex-col gap-6">
@@ -121,25 +114,39 @@ export default function Vehicles() {
         )}
       </div>
 
-      {viewForm
-        ? <Form formData={formData} setViewForm={setViewForm} />
-        : <Table
+      {viewForm ? (
+        <Form
+          formData={formData}
+          setViewForm={setViewForm}
+          roles={roles}
+          onSuccess={() => fetchData(1)}
+        />
+      ) : loading ? (
+        <div className="flex justify-center py-20">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900" />
+        </div>
+      ) : (
+        <Table
           data={data}
           columns={columns}
+          page={page}
+          total={totalPages}
           isDark={isDark}
           onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      }
-
-      {toDelete && (
-        <Deleting
-          isOpen={toDelete}
-          onClose={() => setToDelete(false)}
-          onDelete={() => {
-            setToDelete(false);
+          onDelete={(item: User) => setDeletingItem(item)}
+          onPageChange={(newPage: number) => {
+            if (newPage < 1 || newPage > totalPages) return;
+            fetchData(newPage);
           }}
-          itemName={element}
+        />
+      )}
+
+      {deletingItem && (
+        <Deleting
+          isOpen={!!deletingItem}
+          onClose={() => setDeletingItem(null)}
+          onDelete={handleDelete}
+          itemName={deletingItem.name}
         />
       )}
     </div>

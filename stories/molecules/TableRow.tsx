@@ -1,9 +1,10 @@
 'use client';
 
-import { Badge } from '@atoms/Badge';
-import { DualButton } from '@atoms/DualButton';
+import { Badge } from '../atoms/Badge';
+import { DualButton } from '../atoms/DualButton';
 import { Delete, ModeEdit } from '@mui/icons-material';
 import React from 'react';
+import date, { formatDateTimeISO } from '../../shared/format/date';
 
 export interface TableRowProps {
   data: Record<string, any>;
@@ -18,16 +19,6 @@ export interface TableRowProps {
   onDelete?: () => void;
 }
 
-const formatDate = (dateStr: string) => {
-  const [day, month, year] = dateStr.split('-');
-  const date = new Date(`${year}-${month}-${day}`);
-  return date.toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-};
-
 export const TableRow = ({ data, columns, isDark = false, onEdit, onDelete }: TableRowProps) => {
   const bgColor = isDark ? 'bg-dark-800' : 'bg-white-50';
   const textColor = isDark ? 'text-white-50' : 'text-black-950';
@@ -37,7 +28,7 @@ export const TableRow = ({ data, columns, isDark = false, onEdit, onDelete }: Ta
       {columns.map((col) => {
         let content = data[col.key] || 'None';
 
-        if (col.type === 'badge' && col.badgeColorMap) {
+        if (col.type === 'badge' && col.key !== 'role' && col.badgeColorMap) {
           content = (
             <Badge
               color={col.badgeColorMap[data[col.key] || ''] || '#ccc'}
@@ -85,7 +76,7 @@ export const TableRow = ({ data, columns, isDark = false, onEdit, onDelete }: Ta
         } else if (col.key === 'soat') {
           content = (
             <>
-              {formatDate(data[col.key])}
+              {date(data[col.key])}
             </>
           )
         } else if (col.key === 'actions') {
@@ -104,6 +95,23 @@ export const TableRow = ({ data, columns, isDark = false, onEdit, onDelete }: Ta
             <span className='px-2 py-1 rounded' style={{ color: data[col.key] }}>
               {data[col.key]}
             </span>
+          );
+        } else if (col.key === 'role') {
+          const role = data[col.key];
+
+          content = (
+            <Badge
+              color={role?.color || '#ccc'}
+              label={role?.name || 'None'}
+              isDark={isDark}
+              size="small"
+            />
+          );
+        } else if (col.key === 'entry_date' || col.key === 'exit_date') {
+          content = (
+            <>
+              {formatDateTimeISO(data[col.key])}
+            </>
           );
         }
 

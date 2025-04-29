@@ -7,116 +7,101 @@ import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { Button } from "@atoms/Button";
 import Form from "./form";
-import { Role } from "../../../../types/roles";
 import Deleting from "@components/modals/Deleting";
 import { useT } from "../../../i18n/useT";
-
-const data = [
-  {
-    _id: '1',
-    username: 'johndoe',
-    first_name: 'John Alex',
-    last_name: 'Doe Smith',
-    id: '123456789',
-    role: 'admin',
-    password: '123456',
-  },
-  {
-    _id: '2',
-    username: 'janesmith',
-    first_name: 'Jane Paul',
-    last_name: 'Smith Doe',
-    id: '987654321',
-    role: 'security',
-    password: '123456',
-  },
-  {
-    _id: '3',
-    username: 'alicejohnson',
-    first_name: 'Alice Marie',
-    last_name: 'Johnson Doe',
-    id: '456789123',
-    role: 'security',
-    password: '123456',
-  },
-  {
-    _id: '4',
-    username: 'boblee',
-    first_name: 'Bob Lee',
-    last_name: 'Brown Doe',
-    id: '321654987',
-    role: 'admin',
-    password: '123456',
-  },
-  {
-    _id: '5',
-    username: 'charlieray',
-    first_name: 'Charlie Ray',
-    last_name: 'Davis Doe',
-    id: '654321987',
-    role: 'admin',
-    password: '123456',
-  },
-  {
-    _id: '6',
-    username: 'davidjames',
-    first_name: 'David James',
-    last_name: 'Wilson Doe',
-    id: '789123456',
-    role: 'security',
-    password: '123456',
-  }
-];
+import { Employee } from "../../../../types/employees";
+import { Role } from "../../../../types/roles";
+import EmployeeAPI from "@hooks/configuration/employee/employee";
+import RoleAPI from "@hooks/configuration/role/role";
 
 export default function Vehicles() {
   const { isDark } = useTheme();
   const { t } = useT('employee');
 
-  const columns = [
-    { key: 'id', label: t('id') },
-    { key: 'username', label: t('username') },
-    { key: 'first_name', label: t('first_name') },
-    { key: 'last_name', label: t('last_name') },
-    {
-      key: 'role',
-      label: t('role'),
-      type: 'badge',
-      badgeColorMap: {
-        admin: '#00B69B',
-        security: '#EF3826',
-      },
-    },
-    { key: 'actions', label: t('actions') },
-  ];
+  const [data, setData] = useState<Employee[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [loading, setLoading] = useState(true);
 
   const [viewForm, setViewForm] = useState(false);
-  const [element, setElement] = useState<string>('');
-  const [toDelete, setToDelete] = useState(false);
+  const [deletingItem, setDeletingItem] = useState<Employee | null>(null);
+
+  const limit = 6;
 
   const formData = useForm({
     initialValues: {
-      username: '',
-      first_name: '',
-      last_name: '',
       id: '',
-      role: '',
+      kind_id: '',
+      name: '',
+      last_name: '',
+      gender: '',
+      role_id: '',
+      username: '',
       password: '',
     },
   });
 
-  const handleEdit = (item: any) => {
-    formData.setValues(item);
+  const columns = [
+    { key: 'id', label: t('id') },
+    { key: 'username', label: t('username') },
+    { key: 'name', label: t('name') },
+    { key: 'last_name', label: t('last_name') },
+    {
+      key: 'role',
+      label: t('role'),
+      type: 'badge'
+    },
+    { key: 'actions', label: t('actions') },
+  ];
+
+  const fetchData = async (pageToFetch = 1) => {
+    setLoading(true);
+
+    try {
+      const response = await EmployeeAPI.list(pageToFetch, limit);
+      setData(response.data);
+      setPage(response.meta.page);
+      setTotalPages(response.meta.total_pages);
+    } catch (error) {
+      console.error('Error fetching employees', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const fetchRoles = async () => {
+    try {
+      const response = await RoleAPI.list(1, 100);
+      setRoles(response.data);
+    } catch (error) {
+      console.error('Error fetching roles', error);
+    }
+  };
+
+  const handleEdit = (role: Role) => {
+    formData.setValues(role);
     setViewForm(true);
   };
 
-  const handleDelete = (item: Role) => {
-    setToDelete(true);
-    setElement(item._id);
+  const handleDelete = async () => {
+    if (!deletingItem) return;
+
+    try {
+      await EmployeeAPI.delete(deletingItem.id);
+      setDeletingItem(null);
+      fetchData(page);
+    } catch (error) {
+      console.error('Error deleting role', error);
+    }
   };
 
   useEffect(() => {
-    console.log(element);
-  }, [element]);
+    fetchData();
+    fetchRoles();
+  }, []);
 
   return (
     <div className="flex flex-col gap-6">
@@ -132,25 +117,39 @@ export default function Vehicles() {
         )}
       </div>
 
-      {viewForm
-        ? <Form formData={formData} setViewForm={setViewForm} />
-        : <Table
+      {viewForm ? (
+        <Form
+          formData={formData}
+          setViewForm={setViewForm}
+          roles={roles}
+          onSuccess={() => fetchData(1)}
+        />
+      ) : loading ? (
+        <div className="flex justify-center py-20">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900" />
+        </div>
+      ) : (
+        <Table
           data={data}
           columns={columns}
+          page={page}
+          total={totalPages}
           isDark={isDark}
           onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      }
-
-      {toDelete && (
-        <Deleting
-          isOpen={toDelete}
-          onClose={() => setToDelete(false)}
-          onDelete={() => {
-            setToDelete(false);
+          onDelete={(item: Employee) => setDeletingItem(item)}
+          onPageChange={(newPage: number) => {
+            if (newPage < 1 || newPage > totalPages) return;
+            fetchData(newPage);
           }}
-          itemName={element}
+        />
+      )}
+
+      {deletingItem && (
+        <Deleting
+          isOpen={!!deletingItem}
+          onClose={() => setDeletingItem(null)}
+          onDelete={handleDelete}
+          itemName={deletingItem.name}
         />
       )}
     </div>

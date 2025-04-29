@@ -14,9 +14,15 @@ interface FormProps {
   formData: any;
   setViewForm: any;
   permissions: any;
+  onSuccess: () => void;
 }
 
-export default function Form({ formData, setViewForm, permissions }: FormProps) {
+export default function Form({
+  formData,
+  setViewForm,
+  permissions,
+  onSuccess
+}: FormProps) {
   const { isDark } = useTheme();
   const { t } = useT('role');
 
@@ -63,6 +69,7 @@ export default function Form({ formData, setViewForm, permissions }: FormProps) 
         }
       }
 
+      onSuccess();
       setViewForm(false);
     } catch (error) {
       console.error(error);

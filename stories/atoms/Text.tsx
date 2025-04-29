@@ -11,13 +11,11 @@ export const Text = ({
   size = 'medium',
   children,
 }: TextProps) => {
-  // Color base con hover dinámico
   const baseColor =
     isDark
       ? 'text-white-200'
       : 'text-black-800 group-hover:text-white-50';
 
-  // Tamaños de texto
   const sizes = {
     smallest: 'text-xs',
     small: 'text-sm',

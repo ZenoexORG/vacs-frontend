@@ -9,47 +9,68 @@ import { useTheme } from "@contexts/themeContext";
 import { AreaChart } from "@mantine/charts";
 import { KeyboardArrowDown, TrendingDown, TrendingUp } from "@mui/icons-material";
 import { useT } from "../../i18n/useT";
-
-const data = [
-  {
-    date: 'Mar 22',
-    Apples: 110,
-  },
-  {
-    date: 'Mar 23',
-    Apples: 60,
-  },
-  {
-    date: 'Mar 24',
-    Apples: 80,
-  },
-  {
-    date: 'Mar 25',
-    Apples: null,
-  },
-  {
-    date: 'Mar 26',
-    Apples: null,
-  },
-  {
-    date: 'Mar 27',
-    Apples: 40,
-  },
-  {
-    date: 'Mar 28',
-    Apples: 120,
-  },
-  {
-    date: 'Mar 29',
-    Apples: 80,
-  },
-];
+import { useEffect, useState } from "react";
+import DashboardAPI from "@hooks/dashboard/dashboard";
 
 export default function Dashboard() {
   const { isDark } = useTheme();
   const { t } = useT('dashboard');
 
-  const stats = [
+  const [data, setData] = useState([]);
+  const [stats, setStats] = useState([]);
+
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [loadingChart, setLoadingChart] = useState(true);
+
+  const [month, setMonth] = useState(10);
+  const year = new Date().getFullYear();
+
+  const fetchData = async (month: number, year: number) => {
+    setLoadingChart(true);
+
+    try {
+      const response = await DashboardAPI.vehicleEntries(month, year);
+      setData(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingChart(false);
+    }
+  };
+
+  const fetchStats = async (month: number) => {
+    setLoadingStats(true);
+
+    try {
+      const response = await DashboardAPI.stats(month, year);
+      const rawStats = response.data;
+
+      const formattedStats = [
+        {
+          title: t('total_vehicles'),
+          value: rawStats.vehicles.value.toLocaleString(),
+          percent: [`${rawStats.vehicles.percent[0]}%`, rawStats.vehicles.percent[1]],
+          color: '#6226EF',
+          icon: 'DirectionsCar',
+        },
+        {
+          title: t('total_incidents'),
+          value: rawStats.incidents.value.toLocaleString(),
+          percent: [`${rawStats.incidents.percent[0]}%`, rawStats.incidents.percent[1]],
+          color: '#FFA756',
+          icon: 'Error',
+        },
+      ];
+
+      setStats(formattedStats);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingStats(false);
+    }
+  };
+
+  const statsa = [
     {
       title: t('total_vehicles'),
       value: '1,200',
@@ -66,6 +87,11 @@ export default function Dashboard() {
     },
   ];
 
+  useEffect(() => {
+    fetchData(month, year);
+    fetchStats(month);
+  }, []);
+
   return (
     <div className="flex flex-col gap-6">
       <Title size="3xl" isDark={isDark}>
@@ -73,27 +99,36 @@ export default function Dashboard() {
       </Title>
 
       <div className="grid grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <Card key={index} isDark={isDark}>
-            <div className="flex justify-between items-center">
-              <div>
-                <Text size="medium" isDark={isDark}>{stat.title}</Text>
-                <Title size="2xl" isDark={isDark}>{stat.value}</Title>
+        {loadingStats
+          ? Array(2).fill(0).map((_, index) => (
+            <Card key={index} isDark={isDark}>
+              <div className="animate-pulse space-y-4">
+                <div className="h-4 bg-gray-300 rounded w-3/4" />
+                <div className="h-6 bg-gray-400 rounded w-1/2" />
+              </div>
+            </Card>
+          ))
+          : stats.map((stat, index) => (
+            <Card key={index} isDark={isDark}>
+              <div className="flex justify-between items-center">
+                <div>
+                  <Text size="medium" isDark={isDark}>{stat.title}</Text>
+                  <Title size="2xl" isDark={isDark}>{stat.value}</Title>
+                </div>
+
+                <Icon isDark={isDark} color={stat.color} icon={stat.icon} />
               </div>
 
-              <Icon isDark={isDark} color={stat.color} icon={stat.icon} />
-            </div>
-
-            <Title size="small" isDark={isDark}>
-              <span className={stat.percent[1] === 'up' ? 'text-action-success' : 'text-action-error'}>
-                {stat.percent[1] === 'up'
-                  ? <TrendingUp fontSize="small" />
-                  : <TrendingDown fontSize="small" />
-                } {stat.percent[0]}
-              </span> {t('from_last_month')}
-            </Title>
-          </Card>
-        ))}
+              <Title size="small" isDark={isDark}>
+                <span className={stat.percent[1] === 'up' ? 'text-action-success' : 'text-action-error'}>
+                  {stat.percent[1] === 'up'
+                    ? <TrendingUp fontSize="small" />
+                    : <TrendingDown fontSize="small" />
+                  } {stat.percent[0]}
+                </span> {t('from_last_month')}
+              </Title>
+            </Card>
+          ))}
       </div>
 
       <Card isDark={isDark} space={6}>
@@ -108,13 +143,19 @@ export default function Dashboard() {
           </Button>
         </div>
 
-        <AreaChart
-          className="h-60 w-full"
-          data={data}
-          dataKey="date"
-          series={[{ name: 'Apples', color: 'indigo.6' }]}
-          curveType="bump"
-        />
+        {loadingChart ? (
+          <div className="h-60 w-full flex items-center justify-center">
+            <div className="animate-pulse h-40 w-full bg-gray-300 rounded" />
+          </div>
+        ) : (
+          <AreaChart
+            className="h-60 w-full"
+            data={data}
+            dataKey="date"
+            series={[{ name: 'Apples', color: 'indigo.6' }]}
+            curveType="bump"
+          />
+        )}
       </Card>
     </div>
   );

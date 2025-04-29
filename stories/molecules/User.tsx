@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Title } from '@atoms/Title';
-import { Logo } from '@atoms/Logo';
-import { Text } from '@atoms/Text';
+import { Title } from '../atoms/Title';
+import { Logo } from '../atoms/Logo';
+import { Text } from '../atoms/Text';
 
 export interface UserProps {
   isDark?: boolean;

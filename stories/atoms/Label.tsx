@@ -1,4 +1,5 @@
 import React from 'react';
+import toCamelCase from '../../shared/format/toCamelCase';
 
 export interface LabelProps {
   isDark?: boolean;
@@ -7,13 +8,6 @@ export interface LabelProps {
   htmlFor?: string;
   label?: string;
   onClick?: () => void;
-}
-
-function toCamelCase(text: string) {
-  return text
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
 }
 
 export const Label = ({

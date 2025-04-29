@@ -6,26 +6,48 @@ import { useTheme } from "@contexts/themeContext";
 import { Input } from "@molecules/Input";
 import { Select } from "@molecules/Select";
 import { useT } from "../../../i18n/useT";
+import VehicleAPI from "@hooks/configuration/vehicle/vehicle";
 
 interface FormProps {
   formData: any;
   setViewForm: any;
+  vehicleTypes: any;
+  users: any;
+  onSuccess: () => void;
 }
 
-export default function Form({ formData, setViewForm }: FormProps) {
+export default function Form({
+  formData,
+  setViewForm,
+  vehicleTypes,
+  users,
+  onSuccess
+}: FormProps) {
   const { isDark } = useTheme();
   const { t } = useT('vehicle');
 
-  console.log(formData.values);
   const onCancel = () => {
-    console.log('onCancel');
     formData.reset();
     setViewForm(false);
   }
 
-  const handleSubmit = () => {
-    console.log(formData.values);
-    localStorage.setItem("values", JSON.stringify(formData.values));
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const edit = formData.values.type ? true : false;
+
+      const { user: newUser, type: newType, ...dataWithoutUserAndType } = formData.values;
+
+      edit
+        ? await VehicleAPI.edit(formData.values.id, dataWithoutUserAndType)
+        : await VehicleAPI.create(formData.values);
+
+      onSuccess();
+      setViewForm(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -33,42 +55,44 @@ export default function Form({ formData, setViewForm }: FormProps) {
       <form className="flex flex-col gap-14">
         <div className="grid grid-cols-2 gap-14">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="license_plate" label={t('license_plate')} isDark={isDark} />
+            <Label htmlFor="id" label={t('license_plate')} isDark={isDark} />
             <Input
               isDark={isDark}
-              id="license_plate"
+              id="id"
               type="text"
               placeholder={`${t('enter')} ${t('license_plate')}`}
-              {...formData.getInputProps("license_plate")}
+              {...formData.getInputProps("id")}
               onCard
             />
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label htmlFor="type" label={t('type')} isDark={isDark} />
+            <Label htmlFor="type_id" label={t('type')} isDark={isDark} />
             <Select
               isDark={isDark}
-              id="type"
+              id="type_id"
               placeholder={`${t('select')} ${t('type')}`}
-              {...formData.getInputProps("type")}
+              {...formData.getInputProps("type_id")}
               onCard
             >
-              <Option label="Authorized" value="authorized" isDark={isDark} />
-              <Option label="Visitor" value="visitor" isDark={isDark} />
+              {vehicleTypes.map((type: any) => (
+                <Option key={type.id} label={type.name} value={type.id} isDark={isDark} />
+              ))}
             </Select>
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label htmlFor="user_id" label={t('user_id')} isDark={isDark} />
+            <Label htmlFor="owner_id" label={t('user_id')} isDark={isDark} />
             <Select
               isDark={isDark}
-              id="user_id"
+              id="owner_id"
               placeholder={`${t('select')} ${t('user_id')}`}
-              {...formData.getInputProps("user_id")}
+              {...formData.getInputProps("owner_id")}
               onCard
             >
-              <Option label="123456789" value="123456789" isDark={isDark} />
-              <Option label="987654321" value="987654321" isDark={isDark} />
+              {users.map((user: any) => (
+                <Option key={user.id} label={user.name} value={user.id} isDark={isDark} />
+              ))}
             </Select>
           </div>
 

@@ -6,26 +6,46 @@ import { useTheme } from "@contexts/themeContext";
 import { Input } from "@molecules/Input";
 import { Select } from "@molecules/Select";
 import { useT } from "../../../i18n/useT";
+import EmployeeAPI from "@hooks/configuration/employee/employee";
 
 interface FormProps {
   formData: any;
   setViewForm: any;
+  roles: any;
+  onSuccess: () => void;
 }
 
-export default function Form({ formData, setViewForm }: FormProps) {
+export default function Form({
+  formData,
+  setViewForm,
+  roles,
+  onSuccess
+}: FormProps) {
   const { isDark } = useTheme();
   const { t } = useT('employee');
 
-  console.log(formData.values);
   const onCancel = () => {
-    console.log('onCancel');
     formData.reset();
     setViewForm(false);
   }
 
-  const handleSubmit = () => {
-    console.log(formData.values);
-    localStorage.setItem("values", JSON.stringify(formData.values));
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const edit = formData.values.role ? true : false;
+
+      const { role: newRole, ...dataWithoutRole } = formData.values;
+
+      edit
+        ? await EmployeeAPI.edit(formData.values.id, dataWithoutRole)
+        : await EmployeeAPI.create(formData.values);
+
+      onSuccess();
+      setViewForm(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -33,13 +53,13 @@ export default function Form({ formData, setViewForm }: FormProps) {
       <form className="flex flex-col gap-14">
         <div className="grid grid-cols-2 gap-14">
           <div className="flex flex-col gap-3">
-            <Label htmlFor="first_name" label={t('first_name')} isDark={isDark} />
+            <Label htmlFor="name" label={t('name')} isDark={isDark} />
             <Input
               isDark={isDark}
-              id="first_name"
+              id="name"
               type="text"
-              placeholder={`${t('enter')} ${t('first_name')}`}
-              {...formData.getInputProps("first_name")}
+              placeholder={`${t('enter')} ${t('name')}`}
+              {...formData.getInputProps("name")}
               onCard
             />
           </div>
@@ -55,6 +75,21 @@ export default function Form({ formData, setViewForm }: FormProps) {
             />
           </div>
 
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="kind_id" label={t('kind_id')} isDark={isDark} />
+            <Select
+              isDark={isDark}
+              id="kind_id"
+              placeholder={`${t('select')} ${t('kind_id')}`}
+              {...formData.getInputProps("kind_id")}
+              onCard
+            >
+              <Option label="CC" value="CC" isDark={isDark} />
+              <Option label="TI" value="TI" isDark={isDark} />
+              <Option label="CE" value="CE" isDark={isDark} />
+            </Select>
+          </div>
+
           <div className="flex flex-col gap-3 relative">
             <Label htmlFor="id" label={t('identification')} isDark={isDark} />
             <Input
@@ -68,16 +103,32 @@ export default function Form({ formData, setViewForm }: FormProps) {
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label htmlFor="role" label={t('role')} isDark={isDark} />
+            <Label htmlFor="gender" label={t('gender')} isDark={isDark} />
             <Select
               isDark={isDark}
-              id="role"
-              placeholder={`${t('select')} ${t('role')}`}
-              {...formData.getInputProps("role")}
+              id="gender"
+              placeholder={`${t('select')} ${t('gender')}`}
+              {...formData.getInputProps("gender")}
               onCard
             >
-              <Option label="Admin" value="admin" isDark={isDark} />
-              <Option label="Security" value="security" isDark={isDark} />
+              <Option label={t('m')} value="M" isDark={isDark} />
+              <Option label={t('f')} value="F" isDark={isDark} />
+              <Option label={t('o')} value="O" isDark={isDark} />
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="role_id" label={t('role')} isDark={isDark} />
+            <Select
+              isDark={isDark}
+              id="role_id"
+              placeholder={`${t('select')} ${t('role')}`}
+              {...formData.getInputProps("role_id")}
+              onCard
+            >
+              {roles.map((role: any) => (
+                <Option key={role.id} label={role.name} value={role.id} isDark={isDark} />
+              ))}
             </Select>
           </div>
 

@@ -5,12 +5,17 @@
 
   "id": "Id",
   "username": "Usuario",
-  "first_name": "Nombre",
-  "last_name": "Apellido",
+  "name": "Nombres",
+  "last_name": "Apellidos",
   "role": "Rol",
   "actions": "Acciones",
 
   "identification": "Identificación",
+  "kind_id": "Tipo de Identificación",
+  "gender": "Género",
+  "m": "Masculino",
+  "f": "Femenino",
+  "o": "Otro",
   "password": "Contraseña",
 
   "enter": "Ingresar",

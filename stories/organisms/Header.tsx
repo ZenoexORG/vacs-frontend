@@ -1,9 +1,8 @@
 'use client';
 
-import { Notification } from "@atoms/Notification";
-import { User } from "@molecules/User";
+import { Notification } from "../atoms/Notification";
+import { User } from "../molecules/User";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { useT } from "../../app/i18n/useT";
 
@@ -21,7 +20,6 @@ export const Header = ({
   const color = isDark ? "bg-dark-900 text-white-50" : "bg-white-50 text-dark-950";
   const image = gender === 'M' ? '/assets/icons/man.png' : '/assets/icons/woman.png';
 
-  const router = useRouter();
   const { i18n } = useT();
 
   const changeLanguage = (lng: string) => {

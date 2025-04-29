@@ -7,67 +7,43 @@ import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { Button } from "@atoms/Button";
 import Form from "./form";
-import { Role } from "../../../../types/roles";
 import Deleting from "@components/modals/Deleting";
 import { useT } from "../../../i18n/useT";
+import { Vehicle, VehicleType } from "../../../../types/vehicles";
+import { User } from "../../../../types/users";
+import VehicleAPI from "@hooks/configuration/vehicle/vehicle";
+import VehicleTypeAPI from "@hooks/configuration/vehicle/vehicleType";
+import UserAPI from "@hooks/configuration/user/user";
 
-const data = [
-  {
-    _id: '1',
-    license_plate: 'VKS-250',
-    type: 'authorized',
-    soat: '25-10-2022',
-    user_id: '123456789',
-    user_name: 'John Doe'
-  },
-  {
-    _id: '2',
-    license_plate: 'MWP-123',
-    type: 'visitor',
-    soat: '01-09-2026',
-    user_id: '987654321',
-    user_name: 'Jane Smith'
-  },
-  {
-    _id: '3',
-    license_plate: 'ABC-456',
-    type: 'authorized',
-    soat: '15-05-2023',
-    user_id: '456789123',
-    user_name: 'Alice Johnson'
-  },
-  {
-    _id: '4',
-    license_plate: 'XYZ-789',
-    type: 'visitor',
-    soat: '10-12-2025',
-    user_id: '321654987',
-    user_name: 'Bob Brown'
-  },
-  {
-    _id: '5',
-    license_plate: 'LMN-234',
-    type: 'visitor',
-    soat: '20-03-2024',
-    user_id: '654321987',
-    user_name: 'Charlie Green'
-  },
-  {
-    _id: '6',
-    license_plate: 'OPQ-567',
-    type: 'authorized',
-    soat: '30-06-2027',
-    user_id: '789123456',
-    user_name: 'Diana White'
-  }
-];
-
-export default function Vehicles() {
+export default function Page() {
   const { isDark } = useTheme();
   const { t } = useT('vehicle');
 
+  const [data, setData] = useState<Vehicle[]>([]);
+  const [vehicleTypes, setVehicleTypes] = useState<VehicleType[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [loading, setLoading] = useState(true);
+
+  const [viewForm, setViewForm] = useState(false);
+  const [deletingItem, setDeletingItem] = useState<Vehicle | null>(null);
+
+  const limit = 6;
+
+  const formData = useForm({
+    initialValues: {
+      id: '',
+      type_id: 0,
+      owner_id: '',
+      soat: '',
+    },
+  });
+
   const columns = [
-    { key: 'license_plate', label: t('id') },
+    { key: 'id', label: t('id') },
     {
       key: 'type',
       label: t('type'),
@@ -79,42 +55,72 @@ export default function Vehicles() {
     },
     { key: 'soat', label: t('soat') },
     { key: 'user_id', label: t('user_id') },
-    { key: 'user_name', label: t('user_name') },
+    { key: 'fullname', label: t('user_name') },
     { key: 'actions', label: t('actions') },
   ];
 
-  const [viewForm, setViewForm] = useState(false);
-  const [element, setElement] = useState<string>('');
-  const [toDelete, setToDelete] = useState(false);
+  const fetchData = async (pageToFetch = 1) => {
+    setLoading(true);
 
-  const formData = useForm({
-    initialValues: {
-      license_plate: '',
-      type: '',
-      user_id: '',
-      soat: '',
-    },
-  });
+    try {
+      const response = await VehicleAPI.list(pageToFetch, limit);
+      setData(response.data);
+      setPage(response.meta.page);
+      setTotalPages(response.meta.total_pages);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching vehicles', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-  const handleEdit = (item: any) => {
-    formData.setValues(item);
+  const fetchVehicleType = async () => {
+    try {
+      const response = await VehicleTypeAPI.list(1, 100);
+      setVehicleTypes(response.data);
+    } catch (error) {
+      console.error('Error fetching vehicle types', error);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await UserAPI.list(1, 100);
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching users', error);
+    }
+  };
+
+  const handleEdit = (vehicle: Vehicle) => {
+    formData.setValues(vehicle);
     setViewForm(true);
   };
 
-  const handleDelete = (item: Role) => {
-    setToDelete(true);
-    setElement(item._id);
+  const handleDelete = async () => {
+    if (!deletingItem) return;
+
+    try {
+      await VehicleAPI.delete(deletingItem.id);
+      setDeletingItem(null);
+      fetchData(page);
+    } catch (error) {
+      console.error('Error deleting vehicle', error);
+    }
   };
 
   useEffect(() => {
-    console.log(element);
-  }, [element]);
+    fetchData();
+    fetchVehicleType();
+    fetchUsers();
+  }, []);
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <Title size="3xl" isDark={isDark}>
-          {viewForm ? t('create_vehicle') : t('vehicles')}
+          {viewForm ? t('create_user') : t('vehicles')}
         </Title>
 
         {!viewForm && (
@@ -124,25 +130,40 @@ export default function Vehicles() {
         )}
       </div>
 
-      {viewForm
-        ? <Form formData={formData} setViewForm={setViewForm} />
-        : <Table
+      {viewForm ? (
+        <Form
+          formData={formData}
+          setViewForm={setViewForm}
+          vehicleTypes={vehicleTypes}
+          users={users}
+          onSuccess={() => fetchData(1)}
+        />
+      ) : loading ? (
+        <div className="flex justify-center py-20">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900" />
+        </div>
+      ) : (
+        <Table
           data={data}
           columns={columns}
+          page={page}
+          total={totalPages}
           isDark={isDark}
           onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      }
-
-      {toDelete && (
-        <Deleting
-          isOpen={toDelete}
-          onClose={() => setToDelete(false)}
-          onDelete={() => {
-            setToDelete(false);
+          onDelete={(item: Vehicle) => setDeletingItem(item)}
+          onPageChange={(newPage: number) => {
+            if (newPage < 1 || newPage > totalPages) return;
+            fetchData(newPage);
           }}
-          itemName={element}
+        />
+      )}
+
+      {deletingItem && (
+        <Deleting
+          isOpen={!!deletingItem}
+          onClose={() => setDeletingItem(null)}
+          onDelete={handleDelete}
+          itemName={deletingItem.id}
         />
       )}
     </div>

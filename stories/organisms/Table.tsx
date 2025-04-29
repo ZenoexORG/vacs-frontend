@@ -1,9 +1,10 @@
 'use client';
 
-import { DualButton } from '@atoms/DualButton';
-import { TableRow } from '@molecules/TableRow';
-import React, { useState } from 'react';
+import { DualButton } from '../atoms/DualButton';
+import { TableRow } from '../molecules/TableRow';
+import React from 'react';
 import { Role } from '../../types/roles';
+import { useT } from '../../app/i18n/useT';
 
 export interface TableProps {
   data: Record<string, string | null>[];
@@ -18,6 +19,7 @@ export interface TableProps {
   isDark?: boolean;
   onEdit?: (item: any) => void;
   onDelete?: (item: Role) => void;
+  onPageChange?: (page: number) => void;
 }
 
 export const Table = ({
@@ -27,13 +29,17 @@ export const Table = ({
   page = 1,
   total = 1,
   onEdit,
-  onDelete
+  onDelete,
+  onPageChange
 }: TableProps) => {
+  const { t } = useT('components');
+
   const bgColor = isDark ? 'bg-dark-900' : 'bg-black-50';
   const textColor = isDark ? 'text-white-50' : 'text-black-950';
 
-  const handlePageChange = (page: number) => {
-    if (page < 1 || page > total) return;
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > total) return;
+    onPageChange?.(newPage);
   };
 
   return (
@@ -67,15 +73,15 @@ export const Table = ({
 
       <div className="flex justify-between items-center mt-4">
         <span>
-          Page {page} of {total}
+          {t('page')} {page} {t('of')} {total}
         </span>
 
         <DualButton
+          isDark={isDark}
           leftAction={() => handlePageChange(page - 1)}
           rightAction={() => handlePageChange(page + 1)}
-          isDark={isDark}
         />
       </div>
-    </div>
+    </div >
   );
 };

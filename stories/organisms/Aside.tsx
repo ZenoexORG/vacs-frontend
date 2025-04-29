@@ -1,7 +1,7 @@
 'use client';
 
-import { NavItem } from "@molecules/NavItem";
-import { Divider } from "@atoms/Divider";
+import { NavItem } from "../molecules/NavItem";
+import { Divider } from "../atoms/Divider";
 import React from "react";
 
 export interface AsideProps {

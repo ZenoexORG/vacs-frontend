@@ -4,32 +4,27 @@ import { Title } from "@atoms/Title";
 import { useTheme } from "@contexts/themeContext";
 import { Table } from "@organisms/Table";
 import { useT } from "../../i18n/useT";
-
-const data = [
-  {
-    id: '1',
-    entryDate: '2025-04-01 08:00',
-    exitDate: '2025-04-01 09:00',
-    vehicleId: 'V1234',
-    type: 'car',
-    userId: 'U5678'
-  },
-  { id: '2', entryDate: '2025-04-01 10:00', exitDate: '2025-04-01 11:00', vehicleId: 'V5678', type: 'truck', userId: 'U1234' },
-  { id: '3', entryDate: '2025-04-01 12:00', exitDate: '2025-04-01 13:00', vehicleId: 'V9101', type: 'bike', userId: 'U4321' },
-  { id: '4', entryDate: '2025-04-01 12:00', exitDate: '2025-04-01 13:00', vehicleId: 'V9101', type: 'bike', userId: 'U4321' },
-  { id: '5', entryDate: '2025-04-01 12:00', exitDate: '2025-04-01 13:00', vehicleId: 'V9101', type: 'bike', userId: 'U4321' },
-  { id: '6', entryDate: '2025-04-01 12:00', exitDate: '2025-04-01 13:00', vehicleId: 'V9101', type: 'bike', userId: 'U4321' },
-];
+import { useEffect, useState } from "react";
+import AccessLogAPI from "@hooks/access-log/accessLog";
 
 export default function AccessLog() {
   const { isDark } = useTheme();
   const { t } = useT('access_log');
 
+  const [data, setData] = useState([]);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [loading, setLoading] = useState(true);
+
+  const limit = 6;
+
   const columns = [
     { key: 'id', label: t('id') },
-    { key: 'entryDate', label: t('entry_date') },
-    { key: 'exitDate', label: t('exit_date') },
-    { key: 'vehicleId', label: t('vehicle_id') },
+    { key: 'entry_date', label: t('entry_date') },
+    { key: 'exit_date', label: t('exit_date') },
+    { key: 'vehicle_id', label: t('vehicle_id') },
     {
       key: 'type',
       label: t('type'),
@@ -40,8 +35,27 @@ export default function AccessLog() {
         'bike': '#985423'
       }
     },
-    { key: 'userId', label: t('user_id') },
+    { key: 'owner_id', label: t('user_id') },
   ];
+
+  const fetchData = async (pageToFetch = 1) => {
+    setLoading(true);
+
+    try {
+      const response = await AccessLogAPI.list(pageToFetch, 6);
+      setData(response.data);
+      setPage(response.meta.page);
+      setTotalPages(response.meta.total_pages);
+    } catch (error) {
+      console.error('Error fetching access log', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="flex flex-col gap-6">
@@ -49,7 +63,23 @@ export default function AccessLog() {
         {t('access_log')}
       </Title>
 
-      <Table data={data} columns={columns} isDark={isDark} />
+      {loading ? (
+        <div className="flex items-center justify-center w-full h-96">
+          <p className="text-gray-500">{t('loading')}</p>
+        </div>
+      ) : (
+        <Table
+          data={data}
+          columns={columns}
+          page={page}
+          total={totalPages}
+          isDark={isDark}
+          onPageChange={(newPage: number) => {
+            if (newPage < 1 || newPage > totalPages) return;
+            fetchData(newPage);
+          }}
+        />
+      )}
     </div>
   );
 }

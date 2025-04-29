@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Option } from "@atoms/Option";
+import { Option } from "../atoms/Option";
+import toTitleCase from "../../shared/format/toTitleCase";
 
 export interface SelectProps {
   isDark?: boolean;
@@ -10,11 +11,6 @@ export interface SelectProps {
   onCard?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   children: ReactNode;
-}
-
-function toTitleCase(str: string): string {
-  const cleaned = str.replace(/[-_]/g, ' ').toLowerCase();
-  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 }
 
 export const Select = ({

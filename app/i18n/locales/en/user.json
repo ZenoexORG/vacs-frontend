@@ -4,12 +4,17 @@
   "add_new": "Add New",
 
   "id": "Id",
-  "first_name": "First Name",
+  "name": "First Name",
   "last_name": "Last Name",
   "role": "Role",
   "actions": "Actions",
 
   "identification": "Identification",
+  "kind_id": "Identification Type",
+  "gender": "Gender",
+  "m": "Masculine",
+  "f": "Feminine",
+  "o": "Other",
 
   "enter": "Enter",
   "select": "Select",

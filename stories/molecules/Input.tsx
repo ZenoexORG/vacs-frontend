@@ -1,5 +1,6 @@
 import React from "react";
 import { Check } from "@mui/icons-material";
+import toTitleCase from "../../shared/format/toTitleCase";
 
 export interface InputProps {
   isDark?: boolean;
@@ -11,11 +12,6 @@ export interface InputProps {
   checked?: boolean;
   onClick?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-function toTitleCase(str: string): string {
-  const cleaned = str.replace(/[-_]/g, ' ').toLowerCase();
-  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 }
 
 export const Input = ({

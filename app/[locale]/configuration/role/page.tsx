@@ -1,50 +1,34 @@
 'use client';
 
-import { Title } from "@atoms/Title";
-import { useTheme } from "@contexts/themeContext";
-import { Table } from "@organisms/Table";
 import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
+import { Title } from "@atoms/Title";
 import { Button } from "@atoms/Button";
-import Form from "./form";
-import { Role } from "../../../../types/roles";
-import Deleting from "@components/modals/Deleting";
+import { Table } from "@organisms/Table";
+import { useTheme } from "@contexts/themeContext";
 import { useT } from "../../../i18n/useT";
 import RoleAPI from "@hooks/configuration/role/role";
 import PermissionAPI from "@hooks/no-modules/permission";
+import Form from "./form";
+import Deleting from "@components/modals/Deleting";
+import { Role } from "../../../../types/roles";
 
-export default function Roles() {
+export default function Page() {
   const { isDark } = useTheme();
   const { t } = useT('role');
 
-  const [data, setData] = useState();
+  const [data, setData] = useState<Role[]>([]);
+  const [permissions, setPermissions] = useState<any[]>([]);
+
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(1);
-  const limit = 6;
+  const [totalPages, setTotalPages] = useState(1);
 
   const [loading, setLoading] = useState(true);
 
-  const [permissions, setPermissions] = useState([]);
-
-  const columns = [
-    { key: 'name', label: t('name') },
-    {
-      key: 'type',
-      label: t('type'),
-      type: 'badge',
-      badgeColorMap: {
-        'software': '#00B69B',
-        'utb': '#FFA756'
-      }
-    },
-    { key: 'permissions', label: t('permissions') },
-    { key: 'color', label: t('color') },
-    { key: 'actions', label: t('actions') },
-  ];
-
   const [viewForm, setViewForm] = useState(false);
-  const [element, setElement] = useState<string>('');
-  const [toDelete, setToDelete] = useState(false);
+  const [deletingRole, setDeletingRole] = useState<Role | null>(null);
+
+  const limit = 6;
 
   const formData = useForm({
     initialValues: {
@@ -55,45 +39,66 @@ export default function Roles() {
     },
   });
 
-  const fetchData = async () => {
+  const columns = [
+    { key: 'name', label: t('name') },
+    {
+      key: 'type',
+      label: t('type'),
+      type: 'badge',
+      badgeColorMap: {
+        software: '#00B69B',
+        utb: '#FFA756',
+      },
+    },
+    { key: 'permissions', label: t('permissions') },
+    { key: 'color', label: t('color') },
+    { key: 'actions', label: t('actions') },
+  ];
+
+  const fetchData = async (pageToFetch = 1) => {
     setLoading(true);
+    try {
+      const response = await RoleAPI.list(pageToFetch, limit);
+      setData(response.data);
+      setPage(response.meta.page);
+      setTotalPages(response.meta.total_pages);
+    } catch (error) {
+      console.error('Error fetching roles', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchPermissions = async () => {
+    try {
+      const response = await PermissionAPI.list(1, 100);
+      setPermissions(response.data);
+    } catch (error) {
+      console.error('Error fetching permissions', error);
+    }
+  };
+
+  const handleEdit = (role: Role) => {
+    formData.setValues(role);
+    setViewForm(true);
+  };
+
+  const handleDelete = async () => {
+    if (!deletingRole) return;
 
     try {
-      const dataResponse = await RoleAPI.list(1, limit);
-      setData(dataResponse.data);
-      setPage(dataResponse.meta.page);
-      setTotal(dataResponse.meta.total_pages);
-
-      const permissionsResponse = await PermissionAPI.list(1, 100);
-      console.log(dataResponse);
-
-      setPermissions(permissionsResponse.data);
-      console.log(permissionsResponse);
+      await RoleAPI.delete(deletingRole.id);
+      setDeletingRole(null);
+      fetchData(page);
     } catch (error) {
-      console.error(error);
+      console.error('Error deleting role', error);
     }
-
-    setLoading(false);
   };
 
   useEffect(() => {
     fetchData();
+    fetchPermissions();
   }, []);
-
-  const handleEdit = (item: any) => {
-    formData.setValues(item);
-    setViewForm(true);
-  };
-
-  const handleDelete = (item: Role) => {
-    setToDelete(true);
-
-    try {
-      RoleAPI.delete(item.id);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -109,27 +114,39 @@ export default function Roles() {
         )}
       </div>
 
-      {viewForm
-        ? <Form formData={formData} setViewForm={setViewForm} permissions={permissions} />
-        : <Table
+      {viewForm ? (
+        <Form
+          formData={formData}
+          setViewForm={setViewForm}
+          permissions={permissions}
+          onSuccess={() => fetchData(1)}
+        />
+      ) : loading ? (
+        <div className="flex justify-center py-20">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900" />
+        </div>
+      ) : (
+        <Table
           data={data}
           columns={columns}
           page={page}
-          total={total}
+          total={totalPages}
           isDark={isDark}
           onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      }
-
-      {toDelete && (
-        <Deleting
-          isOpen={toDelete}
-          onClose={() => setToDelete(false)}
-          onDelete={() => {
-            setToDelete(false);
+          onDelete={(role: Role) => setDeletingRole(role)}
+          onPageChange={(newPage: number) => {
+            if (newPage < 1 || newPage > totalPages) return;
+            fetchData(newPage);
           }}
-          itemName={element}
+        />
+      )}
+
+      {deletingRole && (
+        <Deleting
+          isOpen={!!deletingRole}
+          onClose={() => setDeletingRole(null)}
+          onDelete={handleDelete}
+          itemName={deletingRole.name}
         />
       )}
     </div>

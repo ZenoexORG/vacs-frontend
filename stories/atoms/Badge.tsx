@@ -1,24 +1,12 @@
 import React from 'react';
+import hexToRGBA from '../../shared/functions/hexToRBGA';
+import toTitleCase from '../../shared/format/toTitleCase';
 
 export interface BadgeProps {
   isDark?: boolean;
   color: string;
   size?: 'small' | 'medium' | 'large';
   label?: string;
-}
-
-const hexToRGBA = (hex: string, alpha: number) => {
-  const r = parseInt(hex.substring(1, 3), 16);
-  const g = parseInt(hex.substring(3, 5), 16);
-  const b = parseInt(hex.substring(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
-
-
-function toTitleCase(str: string): string {
-  return str
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 export const Badge = ({

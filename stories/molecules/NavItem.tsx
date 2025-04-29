@@ -2,7 +2,7 @@
 
 import React from 'react';
 import * as MuiIcons from "@mui/icons-material";
-import { Title } from '@atoms/Title';
+import { Title } from '../atoms/Title';
 import Link from 'next/link';
 
 export interface NavItemProps {

@@ -25,10 +25,8 @@ export const Link = ({
   children,
   ...props
 }: LinkProps) => {
-  // Color base con hover dinámico
   const baseColor = 'text-primary-400 hover:text-primary-600'
 
-  // Tamaños de texto
   const sizes = {
     smallest: 'text-xs',
     small: 'text-sm',

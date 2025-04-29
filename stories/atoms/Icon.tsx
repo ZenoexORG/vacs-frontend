@@ -1,18 +1,12 @@
 import React from 'react';
 import * as MuiIcons from "@mui/icons-material";
+import hexToRGBA from '../../shared/functions/hexToRBGA';
 
 export interface IconProps {
   isDark: boolean;
   color: string;
   icon: string;
 }
-
-const hexToRGBA = (hex: string, alpha: number) => {
-  const r = parseInt(hex.substring(1, 3), 16);
-  const g = parseInt(hex.substring(3, 5), 16);
-  const b = parseInt(hex.substring(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
 
 export const Icon = ({
   isDark,
