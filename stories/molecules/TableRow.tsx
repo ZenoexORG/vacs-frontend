@@ -51,30 +51,37 @@ export const TableRow = ({ data, columns, isDark = false, onEdit, onDelete }: Ta
 
           data[col.key].forEach((perm: string) => {
             const [category, action] = perm.split(':');
+
             if (!groupedPermissions[category]) {
               groupedPermissions[category] = new Set();
             }
+
             groupedPermissions[category].add(action);
           });
 
           const categories = Object.keys(groupedPermissions);
-          const firstCategory = categories[0];
 
-          const formattedCategory = firstCategory.charAt(0).toUpperCase() + firstCategory.slice(1).toLowerCase();
-          const formattedActions = Array.from(groupedPermissions[firstCategory])
-            .map((action) => action.charAt(0).toUpperCase() + action.slice(1).toLowerCase())
-            .join(', ');
+          if (categories.length > 0) {
+            const firstCategory = categories[0];
 
-          const remainingCategoriesCount = categories.length - 1;
+            const formattedCategory = firstCategory.charAt(0).toUpperCase() + firstCategory.slice(1).toLowerCase();
+            const formattedActions = Array.from(groupedPermissions[firstCategory])
+              .map((action) => action.charAt(0).toUpperCase() + action.slice(1).toLowerCase())
+              .join(', ');
 
-          content = (
-            <>
-              {formattedCategory}: {formattedActions}
-              {remainingCategoriesCount > 0 && (
-                <span className='text-action-success'> [+{remainingCategoriesCount} Categories]</span>
-              )}
-            </>
-          );
+            const remainingCategoriesCount = categories.length - 1;
+
+            content = (
+              <>
+                {formattedCategory}: {formattedActions}
+                {remainingCategoriesCount > 0 && (
+                  <span className='text-action-success'> [+{remainingCategoriesCount} Categories]</span>
+                )}
+              </>
+            );
+          } else {
+            content = <span className='text-muted'>No permissions</span>;
+          }
         } else if (col.key === 'soat') {
           content = (
             <>

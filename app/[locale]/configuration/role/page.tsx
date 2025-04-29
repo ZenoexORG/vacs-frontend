@@ -10,47 +10,21 @@ import Form from "./form";
 import { Role } from "../../../../types/roles";
 import Deleting from "@components/modals/Deleting";
 import { useT } from "../../../i18n/useT";
-
-
-
-const data = [
-  {
-    _id: '1',
-    name: 'Admin',
-    type: 'software',
-    permissions: [
-      "users:create",
-      "users:read",
-      "users:write",
-      "users:delete",
-      "access-log:view",
-      "incidents:read",
-      "incidents:edit",
-    ],
-    color: '#739163',
-  },
-  {
-    _id: '2',
-    name: 'Cleaner',
-    type: 'utb',
-    permissions: [
-      "dashboard:view",
-      "employees:view",
-      "employees:edit",
-      "employees:create",
-      "users:view",
-      "users:edit",
-      "roles:view",
-      "roles:edit",
-      "roles:create",
-    ],
-    color: '#739163',
-  },
-];
+import RoleAPI from "@hooks/configuration/role/role";
+import PermissionAPI from "@hooks/no-modules/permission";
 
 export default function Roles() {
   const { isDark } = useTheme();
   const { t } = useT('role');
+
+  const [data, setData] = useState();
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(1);
+  const limit = 6;
+
+  const [loading, setLoading] = useState(true);
+
+  const [permissions, setPermissions] = useState([]);
 
   const columns = [
     { key: 'name', label: t('name') },
@@ -81,6 +55,31 @@ export default function Roles() {
     },
   });
 
+  const fetchData = async () => {
+    setLoading(true);
+
+    try {
+      const dataResponse = await RoleAPI.list(1, limit);
+      setData(dataResponse.data);
+      setPage(dataResponse.meta.page);
+      setTotal(dataResponse.meta.total_pages);
+
+      const permissionsResponse = await PermissionAPI.list(1, 100);
+      console.log(dataResponse);
+
+      setPermissions(permissionsResponse.data);
+      console.log(permissionsResponse);
+    } catch (error) {
+      console.error(error);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const handleEdit = (item: any) => {
     formData.setValues(item);
     setViewForm(true);
@@ -88,12 +87,13 @@ export default function Roles() {
 
   const handleDelete = (item: Role) => {
     setToDelete(true);
-    setElement(item._id);
-  };
 
-  useEffect(() => {
-    console.log(element);
-  }, [element]);
+    try {
+      RoleAPI.delete(item.id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -110,10 +110,12 @@ export default function Roles() {
       </div>
 
       {viewForm
-        ? <Form formData={formData} setViewForm={setViewForm} />
+        ? <Form formData={formData} setViewForm={setViewForm} permissions={permissions} />
         : <Table
           data={data}
           columns={columns}
+          page={page}
+          total={total}
           isDark={isDark}
           onEdit={handleEdit}
           onDelete={handleDelete}

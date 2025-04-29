@@ -25,7 +25,8 @@
     "access-log": "Access Log",
     "vehicles": "Vehicles",
     "roles": "Roles",
-    "incidents": "Incidents"
+    "incidents": "Incidents",
+    "permissions": "Permissions"
   },
 
   "permission": {

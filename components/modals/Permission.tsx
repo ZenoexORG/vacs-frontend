@@ -1,9 +1,11 @@
+"use client";
+
 import { Button } from "@atoms/Button";
 import { Card } from "@atoms/Card";
 import { Title } from "@atoms/Title";
 import { useTheme } from "@contexts/themeContext";
 import { Input } from "@molecules/Input";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { useT } from "../../app/i18n/useT";
 
@@ -12,17 +14,8 @@ interface PermissionProps {
 	onClose: () => void;
 	permissions: string[];
 	togglePermission: (perm: string) => void;
+	allPermissions: { id: number; name: string }[];
 }
-
-const modules = [
-	{ name: "dashboard", perms: ["view"] },
-	{ name: "employees", perms: ["view", "edit", "create", "delete"] },
-	{ name: "users", perms: ["view", "edit", "create", "delete"] },
-	{ name: "access-log", perms: ["view"] },
-	{ name: "vehicles", perms: ["view", "edit", "create", "delete"] },
-	{ name: "roles", perms: ["view", "edit", "create", "delete"] },
-	{ name: "incidents", perms: ["view", "edit"] },
-];
 
 function toTitleCase(str: string): string {
 	return str
@@ -30,11 +23,28 @@ function toTitleCase(str: string): string {
 		.replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+function groupPermissions(allPermissions: { id: number; name: string }[]) {
+	const grouped: Record<string, string[]> = {};
+
+	allPermissions.forEach((perm) => {
+		const [moduleName, action] = perm.name.split(":");
+
+		if (!grouped[moduleName]) {
+			grouped[moduleName] = [];
+		}
+
+		grouped[moduleName].push(action);
+	});
+
+	return grouped;
+}
+
 export default function Permission({
 	isOpen,
 	onClose,
 	permissions,
 	togglePermission,
+	allPermissions,
 }: PermissionProps) {
 	const { isDark } = useTheme();
 	const { t } = useT('role');
@@ -47,9 +57,7 @@ export default function Permission({
 		return () => document.removeEventListener("keydown", handleKey);
 	}, [onClose]);
 
-	const compactModules = ["dashboard", "access-log", "incidents"];
-	const groupedModules = modules.filter((m) => compactModules.includes(m.name));
-	const regularModules = modules.filter((m) => !compactModules.includes(m.name));
+	const groupedModules = useMemo(() => groupPermissions(allPermissions), [allPermissions]);
 
 	if (!isOpen) return null;
 
@@ -61,61 +69,32 @@ export default function Permission({
 				</Title>
 
 				<div className="grid grid-cols-3 gap-10">
-					<div className="flex flex-col justify-between">
-						{groupedModules.map((module) => (
-							<div key={module.name} className="flex flex-col gap-5">
-								<Title isDark={isDark} size="small">
-									{toTitleCase(t(`modules.${module.name}`))}
-								</Title>
+					{Object.entries(groupedModules).map(([moduleName, actions]) => (
+						<div key={moduleName} className="flex flex-col gap-5">
+							<Title isDark={isDark} size="small">
+								{toTitleCase(t(`modules.${moduleName}`))}
+							</Title>
 
-								<div className="grid grid-cols-2 gap-5">
-									{module.perms.map((perm) => {
-										const value = `${module.name}:${perm}`;
-
-										return (
-											<label key={value} className="flex items-center gap-2 cursor-pointer">
-												<Input
-													type="checkbox"
-													checked={permissions.includes(value)}
-													onChange={() => togglePermission(value)}
-												/>
-												<span className="capitalize">{t(`permission.${perm}`)}</span>
-											</label>
-										);
-									})}
-								</div>
+							<div className="grid grid-cols-2 gap-5">
+								{actions.map((action) => {
+									const value = `${moduleName}:${action}`;
+									return (
+										<label key={value} className="flex items-center gap-2 cursor-pointer">
+											<Input
+												type="checkbox"
+												checked={permissions.includes(value)}
+												onChange={() => togglePermission(value)}
+											/>
+											<span className="capitalize">{t(`permission.${action}`)}</span>
+										</label>
+									);
+								})}
 							</div>
-						))}
-					</div>
-
-					<div className="grid grid-cols-2 gap-10 col-span-2">
-						{regularModules.map((module) => (
-							<div key={module.name} className="flex flex-col gap-5">
-								<Title isDark={isDark} size="small">
-									{toTitleCase(t(`modules.${module.name}`))}
-								</Title>
-
-								<div className="grid grid-cols-2 gap-5">
-									{module.perms.map((perm) => {
-										const value = `${module.name.toLowerCase()}:${perm}`;
-										return (
-											<label key={value} className="flex items-center gap-2 cursor-pointer">
-												<Input
-													type="checkbox"
-													checked={permissions.includes(value)}
-													onChange={() => togglePermission(value)}
-												/>
-												<span className="capitalize">{t(`permission.${perm}`)}</span>
-											</label>
-										);
-									})}
-								</div>
-							</div>
-						))}
-					</div>
+						</div>
+					))}
 				</div>
 
-				<div className="flex items-center justify-between *:w-1/3 gap-14">
+				<div className="flex items-center justify-between *:w-1/3 gap-14 mt-10">
 					<Button isCancel label={t('cancel')} isDark={isDark} onClick={onClose} />
 					<Button isSubmit label={t('submit')} type="submit" onClick={onClose} />
 				</div>

@@ -13,21 +13,27 @@ export interface TableProps {
     type?: 'text' | 'badge';
     badgeColorMap?: Record<string, string>;
   }[];
+  page?: number;
+  total?: number;
   isDark?: boolean;
   onEdit?: (item: any) => void;
   onDelete?: (item: Role) => void;
 }
 
-export const Table = ({ data, columns, isDark = false, onEdit, onDelete }: TableProps) => {
+export const Table = ({
+  data = [],
+  columns,
+  isDark = false,
+  page = 1,
+  total = 1,
+  onEdit,
+  onDelete
+}: TableProps) => {
   const bgColor = isDark ? 'bg-dark-900' : 'bg-black-50';
   const textColor = isDark ? 'text-white-50' : 'text-black-950';
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const totalPages = Math.ceil(data.length / 6);
-
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    if (page < 1 || page > total) return;
   };
 
   return (
@@ -61,12 +67,12 @@ export const Table = ({ data, columns, isDark = false, onEdit, onDelete }: Table
 
       <div className="flex justify-between items-center mt-4">
         <span>
-          Page {currentPage} of {totalPages}
+          Page {page} of {total}
         </span>
 
         <DualButton
-          leftAction={() => handlePageChange(currentPage - 1)}
-          rightAction={() => handlePageChange(currentPage + 1)}
+          leftAction={() => handlePageChange(page - 1)}
+          rightAction={() => handlePageChange(page + 1)}
           isDark={isDark}
         />
       </div>

@@ -8,21 +8,21 @@ import { Input } from "@molecules/Input";
 import { Select } from "@molecules/Select";
 import { useState } from "react";
 import { useT } from "../../../i18n/useT";
+import RoleAPI from "@hooks/configuration/role/role";
 
 interface FormProps {
   formData: any;
   setViewForm: any;
+  permissions: any;
 }
 
-export default function Form({ formData, setViewForm }: FormProps) {
+export default function Form({ formData, setViewForm, permissions }: FormProps) {
   const { isDark } = useTheme();
   const { t } = useT('role');
 
-  console.log(formData.values);
   const [showPermissions, setShowPermissions] = useState(false);
 
   const onCancel = () => {
-    console.log('onCancel');
     formData.reset();
     setViewForm(false);
   }
@@ -36,9 +36,37 @@ export default function Form({ formData, setViewForm }: FormProps) {
     formData.setFieldValue("permissions", updated);
   };
 
-  const handleSubmit = () => {
-    console.log(formData.values);
-    localStorage.setItem("values", JSON.stringify(formData.values));
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const edit = formData.values.id ? true : false;
+
+      const { permissions: newPermissions, id: newId, ...dataWithoutPermissions } = formData.values;
+
+      const response = edit
+        ? await RoleAPI.edit(newId, dataWithoutPermissions)
+        : await RoleAPI.create(formData.values);
+
+      if (response) {
+        const permissionsIds = (newPermissions || []).map((permission: string) => {
+          const perm = permissions.find((p: any) => p.name === permission);
+          return perm ? perm.id : null;
+        }).filter((id: any) => id !== null);
+
+        const originalPermissions = formData.initialValues?.permissions || [];
+
+        const permissionsChanged = JSON.stringify(originalPermissions.sort()) !== JSON.stringify((newPermissions || []).sort());
+
+        if (permissionsChanged && permissionsIds.length > 0) {
+          await RoleAPI.managePermissions(edit ? newId : response.id, { permissionIds: permissionsIds });
+        }
+      }
+
+      setViewForm(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -101,6 +129,7 @@ export default function Form({ formData, setViewForm }: FormProps) {
             onClose={() => setShowPermissions(false)}
             permissions={formData.values.permissions || []}
             togglePermission={togglePermission}
+            allPermissions={permissions}
           />
         </div>
 

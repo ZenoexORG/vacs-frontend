@@ -19,7 +19,6 @@ export const Button = ({
   isSubmit = false,
   isCancel,
   size = 'medium',
-  type = 'button',
   label,
   children,
   className,
@@ -48,7 +47,7 @@ export const Button = ({
 
   return (
     <button
-      type={type}
+      type={isSubmit ? 'submit' : 'button'}
       className={`flex items-center justify-center gap-3 rounded-md duration-500 font-bold ${sizes[size]} ${bgColor} ${className}`}
       onClick={onClick}
     >
