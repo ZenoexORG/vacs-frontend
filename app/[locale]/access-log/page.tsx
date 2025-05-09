@@ -6,6 +6,7 @@ import { Table } from "@organisms/Table";
 import { useT } from "../../i18n/useT";
 import { useEffect, useState } from "react";
 import AccessLogAPI from "@hooks/access-log/accessLog";
+import { io, Socket } from "socket.io-client";
 
 export default function AccessLog() {
   const { isDark } = useTheme();
@@ -55,6 +56,31 @@ export default function AccessLog() {
 
   useEffect(() => {
     fetchData();
+
+    const socket: Socket = io("http://localhost:9200/notifications", {
+      transports: ["websocket"],
+    });
+
+    socket.on("access-logs:entry", (newLog) => {
+      console.log(newLog);
+      setData((prevData) => [newLog.data, ...prevData]);
+    });
+
+    socket.on("access-logs:exit", (updatedLog) => {
+      setData((prevData) =>
+        prevData.map((log) =>
+          log.id === updatedLog.data.id ? { ...log, ...updatedLog.data } : log
+        )
+      );
+    });
+
+    socket.on("connect_error", (error) => {
+      console.error("Error al conectar con el WebSocket:", error);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   return (

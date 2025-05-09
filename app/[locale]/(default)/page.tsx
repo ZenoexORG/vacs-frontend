@@ -30,6 +30,7 @@ export default function Dashboard() {
 
     try {
       const response = await DashboardAPI.vehicleEntries(month, year);
+      console.log('Vehicle Entries:', response.data);
       setData(response.data);
     } catch (error) {
       console.error(error);
@@ -48,8 +49,8 @@ export default function Dashboard() {
       const formattedStats = [
         {
           title: t('total_vehicles'),
-          value: rawStats.vehicles.value.toLocaleString(),
-          percent: [`${rawStats.vehicles.percent[0]}%`, rawStats.vehicles.percent[1]],
+          value: rawStats.entries.value.toLocaleString(),
+          percent: [`${rawStats.entries.percent[0]}%`, rawStats.entries.percent[1]],
           color: '#6226EF',
           icon: 'DirectionsCar',
         },
