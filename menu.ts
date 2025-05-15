@@ -12,6 +12,13 @@ export const headerPageMenu = {
 		path: '/:locale/access-log',
 		icon: 'FormatListNumberedOutlined',
 	},
+
+	reports: {
+		id: 'reports',
+		text: 'Reports',
+		path: '/:locale/reports',
+		icon: 'DataSaverOff',
+	},
 }
 
 export const PageMenu = {
@@ -68,17 +75,10 @@ export const PageMenu = {
 }
 
 export const footerPageMenu = {
-	about: {
-		id: 'about',
-		text: 'About',
-		path: '/:locale/about',
-		icon: 'InfoOutlined',
-	},
-
 	logout: {
 		id: 'logout',
 		text: 'Logout',
-		path: '/:locale/logout',
+		path: '/:locale/auth',
 		icon: 'ExitToAppOutlined',
 	},
 }

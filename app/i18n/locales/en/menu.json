@@ -1,6 +1,7 @@
 {
   "dashboard": "Dashboard",
   "accessLog": "Access Log",
+  "reports": "Reports",
   "security": "Security",
   "incident": "Incidents",
   "configuration": "Configuration",
@@ -8,6 +9,5 @@
   "user": "Users",
   "vehicle": "Vehicles",
   "role": "Roles",
-  "about": "About",
   "logout": "Logout"
 }

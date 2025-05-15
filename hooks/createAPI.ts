@@ -12,6 +12,11 @@ const createAPI = (path: string) => ({
 		return response.data;
 	},
 
+	get: async (id: string) => {
+		const response = await API.get(`${path}/${id}`);
+		return response.data;
+	},
+
 	edit: async (id: string, data: any) => {
 		const response = await API.patch(`${path}/${id}`, data);
 		return response.data;

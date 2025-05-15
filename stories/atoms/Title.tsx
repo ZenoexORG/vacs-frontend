@@ -6,6 +6,7 @@ export interface TitleProps {
   size?: 'small' | 'medium' | 'large' | 'smallest' | 'largest' | '2xl' | '3xl';
   isSelect?: boolean;
   children?: ReactNode;
+  className?: string;
 }
 
 export const Title = ({
@@ -14,6 +15,7 @@ export const Title = ({
   isNav = false,
   isSelect,
   children,
+  className,
   ...props
 }: TitleProps) => {
   const styles =
@@ -34,7 +36,7 @@ export const Title = ({
   };
 
   return (
-    <h2 className={`${sizes[size]} ${styles}`} {...props}>
+    <h2 className={`${sizes[size]} ${styles} ${className}`} {...props}>
       {children}
     </h2>
   );

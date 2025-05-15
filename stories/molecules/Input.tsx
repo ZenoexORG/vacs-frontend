@@ -12,6 +12,7 @@ export interface InputProps {
   checked?: boolean;
   onClick?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
 }
 
 export const Input = ({
@@ -24,6 +25,7 @@ export const Input = ({
   checked,
   onClick,
   onChange,
+  className,
   ...props
 }: InputProps) => {
   const color = onCard
@@ -47,7 +49,7 @@ export const Input = ({
           checked={checked}
           onChange={onChange}
           onClick={onClick}
-          className="peer appearance-none w-6 h-6 border border-[#A3A3A3] rounded bg-transparent cursor-pointer"
+          className={`peer appearance-none w-6 h-6 border border-[#A3A3A3] rounded bg-transparent cursor-pointer ${className}`}
           {...props}
         />
         <Check className="!w-4 !h-4 text-[#A3A3A3] absolute pointer-events-none opacity-0 peer-checked:opacity-100" />
