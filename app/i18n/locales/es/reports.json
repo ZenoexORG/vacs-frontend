@@ -1,0 +1,21 @@
+{
+  "reports": "Reportes",
+  "downloadReports": "Descargar Reportes",
+  "reportsDescription": "Aquí puedes descargar reportes generados o generar nuevos.",
+  "singleDateReport": "Reporte de Fecha Única",
+  "dateRangeReport": "Reporte de Rango de Fechas",
+  "selectDate": "Seleccionar Fecha",
+  "startDate": "Fecha de Inicio",
+  "endDate": "Fecha de Fin",
+  "downloadReport": "Descargar Reporte",
+  "generateReport": "Generar Reporte",
+  "downloading": "Descargando...",
+  "generating": "Generando...",
+  "downloadSuccess": "Reporte descargado exitosamente",
+  "generateSuccess": "Reporte generado exitosamente",
+  "selectDateError": "Por favor selecciona una fecha",
+  "selectDateRangeError": "Por favor selecciona fechas de inicio y fin",
+  "downloadError": "Error al descargar el reporte",
+  "generateError": "Error al generar el reporte",
+  "noReportAvailable": "No hay reporte disponible para la(s) fecha(s) seleccionada(s)"
+}

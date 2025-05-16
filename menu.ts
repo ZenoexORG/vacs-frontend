@@ -70,6 +70,13 @@ export const PageMenu = {
 				path: '/:locale/configuration/role',
 				icon: 'AccountTreeOutlined',
 			},
+
+			parameter: {
+				id: 'parameter',
+				text: 'Parameters',
+				path: '/:locale/configuration/parameter',
+				icon: 'SettingsSuggestOutlined',
+			},
 		},
 	},
 }
