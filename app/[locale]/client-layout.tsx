@@ -12,6 +12,7 @@ import { ThemeProvider } from '@contexts/themeContext';
 import { DefaultAside } from '@components/DefaultAside';
 import { DefaultHeader } from '@components/DefaultHeader';
 import { usePathname } from 'next/navigation';
+import { AuthCheck } from '@components/AuthCheck';
 
 const theme = createTheme({});
 
@@ -26,17 +27,19 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 				<ThemeProvider>
 					<MantineProvider theme={theme}>
 						<Notifications />
-						{isAuthPage ? (
-							<main>{children}</main>
-						) : (
-							<main className="flex items-center">
-								<DefaultAside />
-								<div className="h-screen w-full flex flex-col">
-									<DefaultHeader />
-									<div className="p-6 h-0 flex-grow overflow-auto no-scrollbar">{children}</div>
-								</div>
-							</main>
-						)}
+						<AuthCheck>
+							{isAuthPage ? (
+								<main>{children}</main>
+							) : (
+								<main className="flex items-center">
+									<DefaultAside />
+									<div className="h-screen w-full flex flex-col">
+										<DefaultHeader />
+										<div className="p-6 h-0 flex-grow overflow-auto no-scrollbar">{children}</div>
+									</div>
+								</main>
+							)}
+						</AuthCheck>
 					</MantineProvider>
 				</ThemeProvider>
 			</body>
