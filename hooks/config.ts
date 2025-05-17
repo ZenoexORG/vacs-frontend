@@ -14,7 +14,7 @@ API.interceptors.response.use(
 	(response) => response,
 	(error) => {
 		// Manejar errores 401 (Unauthorized) o 403 (Forbidden)
-		if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+		if (error.response && (error.response.statusCode === 401)) {
 			console.log('Sesión expirada o no autorizada');
 
 			// Limpiar datos de usuario

@@ -30,7 +30,6 @@ export default function Dashboard() {
 
     try {
       const response = await DashboardAPI.vehicleEntries(month, year);
-      console.log('Vehicle Entries:', response.data);
       setData(response.data);
     } catch (error) {
       console.error(error);

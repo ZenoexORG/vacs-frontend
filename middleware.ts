@@ -5,7 +5,7 @@ import { fallbackLng, languages, cookieName, headerName } from './app/i18n/confi
 acceptLanguage.languages(languages)
 
 // Nombre de la cookie de autenticación (ajusta según lo que use tu API)
-const AUTH_COOKIE_NAME = 'auth_token'; // Reemplaza con el nombre real de tu cookie de autenticación
+const AUTH_COOKIE_NAME = 'token'; // Reemplaza con el nombre real de tu cookie de autenticación
 
 export const config = {
 	matcher: ['/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|site.webmanifest).*)']
