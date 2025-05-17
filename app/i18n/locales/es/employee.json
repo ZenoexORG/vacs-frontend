@@ -22,5 +22,9 @@
   "select": "Seleccionar",
 
   "submit": "Enviar",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+
+  "success": "Éxito",
+  "edit_success": "La edición del empleado fue exitosa.",
+  "create_success": "La creación del empleado fue exitosa."
 }

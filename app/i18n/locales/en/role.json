@@ -34,5 +34,9 @@
     "edit": "edit",
     "create": "Create",
     "delete": "Delete"
-  }
+  },
+
+  "success": "Success",
+  "edit_success": "The role was edited successfully.",
+  "create_success": "The role was created successfully."
 }

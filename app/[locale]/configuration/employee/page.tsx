@@ -38,7 +38,7 @@ export default function Vehicles() {
       name: '',
       last_name: '',
       gender: '',
-      role_id: '',
+      role_id: 0,
       username: '',
       password: '',
     },

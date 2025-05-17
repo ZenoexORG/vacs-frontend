@@ -33,5 +33,9 @@
     "edit": "Editar",
     "create": "Crear",
     "delete": "Eliminar"
-  }
+  },
+
+  "success": "Éxito",
+  "edit_success": "La edición del rol fue exitosa.",
+  "create_success": "La creación del rol fue exitosa."
 }

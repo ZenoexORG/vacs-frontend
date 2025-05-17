@@ -54,8 +54,8 @@ export default function Page() {
       }
     },
     { key: 'soat', label: t('soat') },
-    { key: 'user_id', label: t('user_id') },
-    { key: 'fullname', label: t('user_name') },
+    { key: 'owner_id', label: t('user_id') },
+    { key: 'owner_fullname', label: t('user_name') },
     { key: 'actions', label: t('actions') },
   ];
 
@@ -120,7 +120,7 @@ export default function Page() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <Title size="3xl" isDark={isDark}>
-          {viewForm ? t('create_user') : t('vehicles')}
+          {viewForm ? t('create_vehicle') : t('vehicles')}
         </Title>
 
         {!viewForm && (

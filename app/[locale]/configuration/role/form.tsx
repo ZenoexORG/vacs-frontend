@@ -9,6 +9,7 @@ import { Select } from "@molecules/Select";
 import { useState } from "react";
 import { useT } from "../../../i18n/useT";
 import RoleAPI from "@hooks/configuration/role/role";
+import { notifications } from "@mantine/notifications";
 
 interface FormProps {
   formData: any;
@@ -71,10 +72,35 @@ export default function Form({
         }
       }
 
+      notifications.show({
+        title: t('success'),
+        message: edit ? t('edit_success') : t('create_success'),
+        color: 'green',
+        autoClose: 5000,
+      });
+
       onSuccess();
       setViewForm(false);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      const messages = error.response.data.message;
+
+      if (Array.isArray(messages)) {
+        messages.forEach((message: string) => {
+          notifications.show({
+            title: 'Error',
+            message: message,
+            color: 'red',
+            autoClose: 5000,
+          });
+        });
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: messages,
+          color: 'red',
+          autoClose: 5000,
+        });
+      }
     }
   };
 

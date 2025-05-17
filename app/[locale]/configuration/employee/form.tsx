@@ -42,19 +42,35 @@ export default function Form({
         ? await EmployeeAPI.edit(formData.values.id, dataWithoutRole)
         : await EmployeeAPI.create(formData.values);
 
+      notifications.show({
+        title: t('success'),
+        message: edit ? t('edit_success') : t('create_success'),
+        color: 'green',
+        autoClose: 5000,
+      });
+
       onSuccess();
       setViewForm(false);
     } catch (error: any) {
       const messages = error.response.data.message;
 
-      messages.forEach((message: string) => {
+      if (Array.isArray(messages)) {
+        messages.forEach((message: string) => {
+          notifications.show({
+            title: 'Error',
+            message: message,
+            color: 'red',
+            autoClose: 5000,
+          });
+        });
+      } else {
         notifications.show({
           title: 'Error',
-          message: message,
+          message: messages,
           color: 'red',
           autoClose: 5000,
         });
-      });
+      }
     }
   };
 

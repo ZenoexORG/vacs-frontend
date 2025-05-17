@@ -20,5 +20,9 @@
   "select": "Select",
 
   "submit": "Submit",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+
+  "success": "Success",
+  "edit_success": "The user was edited successfully.",
+  "create_success": "The user was created successfully."
 }

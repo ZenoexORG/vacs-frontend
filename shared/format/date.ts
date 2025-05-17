@@ -1,12 +1,27 @@
 export default function date(dateStr: string) {
-	const [day, month, year] = dateStr.split('-');
+	if (!dateStr) return '';
+
+	let day, month, year;
+
+	if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+		[year, month, day] = dateStr.split('-');
+	} else {
+		[day, month, year] = dateStr.split('-');
+	}
+
 	const date = new Date(`${year}-${month}-${day}`);
+
+	if (isNaN(date.getTime())) {
+		console.error('Invalid date:', dateStr);
+		return 'Invalid Date';
+	}
+
 	return date.toLocaleDateString('en-GB', {
 		day: '2-digit',
 		month: 'short',
 		year: 'numeric',
 	});
-};
+}
 
 export function formatDateTimeISO(isoStr: string): string {
 	if (!isoStr) return 'None';

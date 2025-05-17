@@ -7,6 +7,7 @@ import { Input } from "@molecules/Input";
 import { Select } from "@molecules/Select";
 import { useT } from "../../../i18n/useT";
 import VehicleAPI from "@hooks/configuration/vehicle/vehicle";
+import { notifications } from "@mantine/notifications";
 
 interface FormProps {
   formData: any;
@@ -37,16 +38,41 @@ export default function Form({
     try {
       const edit = formData.values.type ? true : false;
 
-      const { user: newUser, type: newType, ...dataWithoutUserAndType } = formData.values;
+      const { user: newUser, type: newType, created_at: newDate, owner_fullname: newOwner, ...dataWithoutUserAndType } = formData.values;
 
       edit
         ? await VehicleAPI.edit(formData.values.id, dataWithoutUserAndType)
         : await VehicleAPI.create(formData.values);
 
+      notifications.show({
+        title: t('success'),
+        message: edit ? t('edit_success') : t('create_success'),
+        color: 'green',
+        autoClose: 5000,
+      });
+
       onSuccess();
       setViewForm(false);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      const messages = error.response.data.message;
+
+      if (Array.isArray(messages)) {
+        messages.forEach((message: string) => {
+          notifications.show({
+            title: 'Error',
+            message: message,
+            color: 'red',
+            autoClose: 5000,
+          });
+        });
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: messages,
+          color: 'red',
+          autoClose: 5000,
+        });
+      }
     }
   };
 

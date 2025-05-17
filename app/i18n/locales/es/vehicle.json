@@ -16,5 +16,9 @@
   "select": "Seleccionar",
 
   "submit": "Enviar",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+
+  "success": "Éxito",
+  "edit_success": "La edición del vehiculo fue exitosa.",
+  "create_success": "La creación del vehiculo fue exitosa."
 }
