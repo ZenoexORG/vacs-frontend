@@ -36,16 +36,36 @@ export default function Auth() {
     try {
       const values = formData.values;
 
-      const response = await AuthAPI.login(values);
+      await AuthAPI.login(values);
+
+      notifications.show({
+        title: t("login"),
+        message: t("loginSuccess"),
+        color: 'green',
+        autoClose: 5000,
+      });
 
       route.push("/");
-    } catch (error) {
-      notifications.show({
-        title: t("error"),
-        message: t("errorMessage"),
-        color: "red",
-        icon: <i className="fa-solid fa-triangle-exclamation" />,
-      });
+    } catch (error: any) {
+      const messages = error.response.data.message;
+
+      if (Array.isArray(messages)) {
+        messages.forEach((message: string) => {
+          notifications.show({
+            title: 'Error',
+            message: message,
+            color: 'red',
+            autoClose: 5000,
+          });
+        });
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: messages,
+          color: 'red',
+          autoClose: 5000,
+        });
+      }
     }
   }
 

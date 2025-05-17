@@ -50,9 +50,11 @@ export default function Form({
 
       const { permissions: newPermissions, id: newId, ...dataWithoutPermissions } = formData.values;
 
+      console.log('dataWithoutPermissions', dataWithoutPermissions);
+
       const response = edit
         ? await RoleAPI.edit(newId, dataWithoutPermissions)
-        : await RoleAPI.create(formData.values);
+        : await RoleAPI.create(dataWithoutPermissions);
 
       if (response) {
         const permissionsIds = (newPermissions || []).map((permission: string) => {

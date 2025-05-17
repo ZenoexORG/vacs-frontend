@@ -10,12 +10,16 @@ export interface HeaderProps {
   isDark?: boolean;
   number?: number;
   gender?: string;
+  fullname?: string;
+  role?: string;
 }
 
 export const Header = ({
   isDark = false,
   number,
-  gender = 'M'
+  gender = 'M',
+  fullname = 'John Doe',
+  role = 'User'
 }: HeaderProps) => {
   const color = isDark ? "bg-dark-900 text-white-50" : "bg-white-50 text-dark-950";
   const image = gender === 'M' ? '/assets/icons/man.png' : '/assets/icons/woman.png';
@@ -44,8 +48,8 @@ export const Header = ({
           width={38}
           height={38}
           alt="User"
-          name="John Doe"
-          role="Admin"
+          name={fullname}
+          role={role}
         />
       </div>
     </header>

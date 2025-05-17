@@ -7,6 +7,7 @@ import { Input } from "@molecules/Input";
 import { Select } from "@molecules/Select";
 import { useT } from "../../../i18n/useT";
 import EmployeeAPI from "@hooks/configuration/employee/employee";
+import { notifications } from "@mantine/notifications";
 
 interface FormProps {
   formData: any;
@@ -43,8 +44,17 @@ export default function Form({
 
       onSuccess();
       setViewForm(false);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      const messages = error.response.data.message;
+
+      messages.forEach((message: string) => {
+        notifications.show({
+          title: 'Error',
+          message: message,
+          color: 'red',
+          autoClose: 5000,
+        });
+      });
     }
   };
 
