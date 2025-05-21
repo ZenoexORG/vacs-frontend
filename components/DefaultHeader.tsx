@@ -5,7 +5,7 @@ import { Header } from "@organisms/Header";
 import { useAuth } from "@hooks/auth/useAuth";
 import { getCookie } from "cookies-next";
 
-export const DefaultHeader = () => {
+export const DefaultHeader = ({ onMenuClick }) => {
 	const { isDark } = useTheme();
 	const { user, isLoading } = useAuth();
 
@@ -23,6 +23,7 @@ export const DefaultHeader = () => {
 			number={20}
 			fullname={user?.fullname || 'Guest'}
 			role={user?.role || 'User'}
+			onMenuClick={onMenuClick}
 		/>
 	);
 };

@@ -28,7 +28,7 @@ const menuPermissionsMap = {
 	parameter: "permissions:view",
 };
 
-export const DefaultAside = () => {
+export const DefaultAside = ({ isOpen = true, onClose, className = '' }) => {
 	const { isDark } = useTheme();
 	const path = usePathname();
 	const { i18n } = useTranslation();
@@ -112,7 +112,12 @@ export const DefaultAside = () => {
 		footer: filterAndTranslateMenu(footerPageMenu), // Logout should always be visible
 	};
 
-	const handleSelect = (id) => setSelectedId(id);
+	const handleSelect = (id) => {
+		setSelectedId(id);
+		if (window.innerWidth < 768) {
+			onClose();
+		}
+	};
 
 	return (
 		<Aside
@@ -120,6 +125,9 @@ export const DefaultAside = () => {
 			isDark={isDark}
 			selectedId={selectedId}
 			onSelect={handleSelect}
+			isOpen={isOpen}
+			onClose={onClose}
+			className={className}
 		/>
 	);
 };

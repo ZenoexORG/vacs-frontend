@@ -22,18 +22,24 @@
     "dashboard": "Dashboard",
     "employees": "Employees",
     "users": "Users",
-    "access-log": "Access Log",
+    "access-logs": "Access Logs",
     "vehicles": "Vehicles",
     "roles": "Roles",
     "incidents": "Incidents",
-    "permissions": "Permissions"
+    "permissions": "Permissions",
+    "vehicle-types": "Vehicle Types",
+    "incident-messages": "Incident Messages",
+    "daily-reports": "Daily Reports",
+    "cameras": "Cameras"
   },
 
   "permission": {
     "view": "View",
     "edit": "edit",
     "create": "Create",
-    "delete": "Delete"
+    "delete": "Delete",
+    "assign": "Assign",
+    "unassign": "Unassign"
   },
 
   "success": "Success",
