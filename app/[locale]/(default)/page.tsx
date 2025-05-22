@@ -194,9 +194,7 @@ export default function Page() {
               tickLine="y"
               yAxisProps={{
                 width: 60,
-                tickFormatter: (value) => Math.round(value),
-                domain: [0, dataMax => Math.round(dataMax + 2)],
-                allowDecimals: false
+                allowDecimals: false,
               }}
               xAxisProps={{ tickMargin: 10, height: 40 }}
             />

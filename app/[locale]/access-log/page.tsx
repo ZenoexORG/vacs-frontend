@@ -27,13 +27,15 @@ export default function AccessLog() {
     { key: 'exit_date', label: t('exit_date') },
     { key: 'vehicle_id', label: t('vehicle_id') },
     {
-      key: 'type',
+      key: 'vehicle_type',
       label: t('type'),
       type: 'badge',
       badgeColorMap: {
-        'car': '#578215',
-        'truck': '#857238',
-        'bike': '#985423'
+        'authorized': '#00B69B',
+        'private': '#EF3826',
+        'visitor': '#FFA756',
+        'provider': '#6226EF',
+        'unregistered': '#C1009E',
       }
     },
     { key: 'owner_id', label: t('user_id') },
