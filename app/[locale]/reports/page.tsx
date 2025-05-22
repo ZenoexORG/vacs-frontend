@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { Title } from "@atoms/Title";
+import { Card } from "@atoms/Card";
+import { Button } from "@atoms/Button";
+import { Text } from "@atoms/Text";
 import { useTheme } from "@contexts/themeContext";
 import { useT } from "../../i18n/useT";
 import ReportAPI from "@hooks/report/report";
@@ -10,7 +13,7 @@ export default function AccessLog() {
   const { isDark } = useTheme();
   const { t } = useT('reports');
 
-  const [reportType, setReportType] = useState('date'); // 'date' o 'range'
+  const [reportType, setReportType] = useState('date');
   const [date, setDate] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -101,109 +104,114 @@ export default function AccessLog() {
         {t('reports')}
       </Title>
 
-      <div className={`p-4 md:p-6 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
+      <Card isDark={isDark} size="medium" className="shadow-md">
         <div className="mb-4">
-          <h2 className={`text-lg md:text-xl font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+          <Title size="largest" isDark={isDark} className="mb-2">
             {t('downloadReports')}
-          </h2>
-          <p className={`text-sm md:text-base ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+          </Title>
+          <Text isDark={isDark} size="medium">
             {t('reportsDescription')}
-          </p>
+          </Text>
         </div>
 
         <div className="mb-6">
           {/* Report Type Selection - Stack on small screens */}
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4">
-            <button
+            <Button
+              isDark={isDark}
               onClick={() => setReportType('date')}
-              className={`px-3 py-2 rounded text-sm md:text-base ${reportType === 'date'
-                ? (isDark ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white')
-                : (isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700')}`}
+              className={`${reportType === 'date'
+                ? 'bg-primary-600 text-white-50'
+                : isDark ? 'bg-dark-700' : 'bg-black-50'}`}
+              size="small"
             >
               {t('singleDateReport')}
-            </button>
-            <button
+            </Button>
+            <Button
+              isDark={isDark}
               onClick={() => setReportType('range')}
-              className={`px-3 py-2 rounded text-sm md:text-base ${reportType === 'range'
-                ? (isDark ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white')
-                : (isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700')}`}
+              className={`${reportType === 'range'
+                ? 'bg-primary-600 text-white-50'
+                : isDark ? 'bg-dark-700' : 'bg-black-50'}`}
+              size="small"
             >
               {t('dateRangeReport')}
-            </button>
+            </Button>
           </div>
 
           {reportType === 'date' ? (
             <div className="mb-4">
-              <label className={`block mb-2 text-sm md:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              <Title size="small" isDark={isDark} className="mb-2">
                 {t('selectDate')}
-              </label>
+              </Title>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className={`w-full p-2 border rounded text-sm md:text-base ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                className={`w-full p-2 border rounded text-sm md:text-base ${isDark ? 'bg-dark-700 border-dark-600 text-white-50' : 'bg-white-50 border-white-200'}`}
               />
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className={`block mb-2 text-sm md:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                <Title size="small" isDark={isDark} className="mb-2">
                   {t('startDate')}
-                </label>
+                </Title>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className={`w-full p-2 border rounded text-sm md:text-base ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                  className={`w-full p-2 border rounded text-sm md:text-base ${isDark ? 'bg-dark-700 border-dark-600 text-white-50' : 'bg-white-50 border-white-200'}`}
                 />
               </div>
               <div>
-                <label className={`block mb-2 text-sm md:text-base ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                <Title size="small" isDark={isDark} className="mb-2">
                   {t('endDate')}
-                </label>
+                </Title>
                 <input
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className={`w-full p-2 border rounded text-sm md:text-base ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                  className={`w-full p-2 border rounded text-sm md:text-base ${isDark ? 'bg-dark-700 border-dark-600 text-white-50' : 'bg-white-50 border-white-200'}`}
                 />
               </div>
             </div>
           )}
 
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
-            <button
+            <Button
+              isDark={isDark}
+              isSubmit={true}
               onClick={handleDownload}
-              disabled={loading}
-              className={`px-4 py-2 rounded text-sm md:text-base ${isDark ? 'bg-green-600 hover:bg-green-700' : 'bg-green-500 hover:bg-green-600'} text-white disabled:opacity-50 flex-grow sm:flex-grow-0`}
+              className={`disabled:opacity-50 ${loading ? 'opacity-70' : ''}`}
             >
               {loading ? t('downloading') : t('downloadReport')}
-            </button>
+            </Button>
 
             {reportType === 'date' && (
-              <button
+              <Button
+                isDark={isDark}
                 onClick={handleGenerate}
-                disabled={loading}
-                className={`px-4 py-2 rounded text-sm md:text-base ${isDark ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-yellow-500 hover:bg-yellow-600'} text-white disabled:opacity-50 flex-grow sm:flex-grow-0`}
+                className={`bg-action-warning text-white-50 hover:bg-action-warning/80 disabled:opacity-50 ${loading ? 'opacity-70' : ''}`}
               >
                 {loading ? t('generating') : t('generateReport')}
-              </button>
+              </Button>
             )}
           </div>
         </div>
 
         {error && (
-          <div className="p-3 mb-4 rounded text-sm md:text-base bg-red-100 border border-red-300 text-red-800">
+          <div className="p-3 mb-4 rounded text-sm md:text-base bg-action-error/20 border border-action-error text-action-error">
             {error}
           </div>
         )}
 
         {successMessage && (
-          <div className="p-3 mb-4 rounded text-sm md:text-base bg-green-100 border border-green-300 text-green-800">
+          <div className="p-3 mb-4 rounded text-sm md:text-base bg-action-success/20 border border-action-success text-action-success">
             {successMessage}
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

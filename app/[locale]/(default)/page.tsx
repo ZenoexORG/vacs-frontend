@@ -22,8 +22,8 @@ export default function Page() {
   const [loadingStats, setLoadingStats] = useState(true);
   const [loadingChart, setLoadingChart] = useState(true);
 
-  const [month, setMonth] = useState(10);
-  const year = new Date().getFullYear();
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
 
   const fetchData = async (month: number, year: number) => {
     setLoadingChart(true);
@@ -187,13 +187,18 @@ export default function Page() {
             <AreaChart
               className="h-full w-full"
               data={data}
-              dataKey="date"
-              series={[{ name: 'Apples', color: 'indigo.6' }]}
+              dataKey="day"
+              series={[{ name: 'total', color: 'indigo.6' }]}
               curveType="bump"
               withLegend={false}
               tickLine="y"
-              yAxisProps={{ width: 60 }}
-              xAxisProps={{ tickMargin: 10 }}
+              yAxisProps={{
+                width: 60,
+                tickFormatter: (value) => Math.round(value),
+                domain: [0, dataMax => Math.round(dataMax + 2)],
+                allowDecimals: false
+              }}
+              xAxisProps={{ tickMargin: 10, height: 40 }}
             />
           </div>
         )}
