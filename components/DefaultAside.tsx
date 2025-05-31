@@ -53,10 +53,10 @@ export const DefaultAside = ({
 		}
 	}, []);
 
-	const hasPermission = (menuId: string) => {
+	const hasPermission = (menuId: string): boolean => {
 		if (menuId === 'logout') return true;
-		if (!menuPermissionsMap[menuId]) return false;
-		return userPermissions.includes(menuPermissionsMap[menuId]);
+		const permissionKey = menuPermissionsMap[menuId as keyof typeof menuPermissionsMap];
+		return permissionKey ? userPermissions.includes(permissionKey) : false;
 	};
 
 	const filterAndTranslateMenu = (menu: Record<string, any>) => {
