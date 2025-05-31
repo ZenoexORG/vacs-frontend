@@ -10,7 +10,7 @@ export function useT(ns?: string) {
 
 	useEffect(() => {
 		if (lng && i18n.language !== lng) {
-			i18n.changeLanguage(lng)
+			i18n.changeLanguage(Array.isArray(lng) ? lng[0] : lng)
 		}
 	}, [lng])
 
