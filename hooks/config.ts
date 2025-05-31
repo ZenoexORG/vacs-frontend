@@ -10,6 +10,9 @@ const API = axios.create({
 	withCredentials: true,
 });
 
+const languages = ['es', 'en'];
+const fallbackLng = 'es';
+
 API.interceptors.response.use(
 	(response) => response,
 	(error) => {
