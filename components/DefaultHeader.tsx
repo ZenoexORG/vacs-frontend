@@ -13,7 +13,7 @@ type DefaultHeaderProps = {
 
 export const DefaultHeader = ({ onMenuClick }: DefaultHeaderProps) => {
 	const { isDark } = useTheme();
-	const { user, isLoading } = useAuth();
+	const { user, isLoading } = useAuth() as { user: { fullname?: string; role?: string } | null; isLoading: boolean };
 	const [incidentCount, setIncidentCount] = useState(0);
 
 	useEffect(() => {
@@ -22,7 +22,6 @@ export const DefaultHeader = ({ onMenuClick }: DefaultHeaderProps) => {
 		});
 
 		socket.on("incidents_count", (data) => {
-			console.log("Recibido recuento de incidentes:", data);
 			setIncidentCount(data.count || 0);
 		});
 
@@ -52,4 +51,3 @@ export const DefaultHeader = ({ onMenuClick }: DefaultHeaderProps) => {
 		/>
 	);
 };
-
