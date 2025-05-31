@@ -1,4 +1,4 @@
-import React, { ReactNode, forwardRef, Ref } from 'react';
+import React, { ReactNode, forwardRef, Ref, MouseEventHandler } from 'react';
 
 export interface CardProps {
   isDark?: boolean;
@@ -6,9 +6,9 @@ export interface CardProps {
   space?: number;
   size?: 'small' | 'medium' | 'large';
   className?: string;
+  onClick?: MouseEventHandler<HTMLDivElement>; // ✅ añadir esto
 }
 
-// Usamos forwardRef para pasar ref al div interno
 export const Card = forwardRef<HTMLDivElement, CardProps>((
   {
     isDark = false,
@@ -16,6 +16,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>((
     space = 0,
     size = 'medium',
     className,
+    onClick, // ✅ recibirlo como prop
   },
   ref: Ref<HTMLDivElement>
 ) => {
@@ -29,7 +30,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>((
 
   return (
     <div
-      ref={ref}  // Aquí pasamos el ref
+      ref={ref}
+      onClick={onClick} // ✅ pasarlo al div
       className={`${sizes[size]} ${color} rounded-lg flex flex-col ${className}`}
     >
       {children}
@@ -37,5 +39,5 @@ export const Card = forwardRef<HTMLDivElement, CardProps>((
   );
 });
 
-Card.displayName = "Card"; // para mejores mensajes en devtools y debugging
+Card.displayName = "Card";
 
