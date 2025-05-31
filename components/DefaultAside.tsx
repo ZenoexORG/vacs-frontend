@@ -8,27 +8,17 @@ import { usePathname } from "next/navigation";
 import { useT } from "../app/i18n/useT";
 import { useTranslation } from "react-i18next";
 
-// Permission mapping for menu items
-const menuPermissionsMap = {
-	// Header menu
-	dashboard: "dashboard:view",
-	accessLog: "access-logs:view",
-	reports: "daily-reports:view",
-
-	// Main menu (PageMenu)
-	security: "incidents:view", // If user can view incidents, show the security section
-	incident: "incidents:view",
-
-	// Configuration submenu items
-	configuration: "users:view", // If user can view at least one config item, show the section
-	employee: "employees:view",
-	user: "users:view",
-	vehicle: "vehicles:view",
-	role: "roles:view",
-	parameter: "permissions:view",
+type DefaultAsideProps = {
+	isOpen?: boolean;
+	onClose: () => void;
+	className?: string;
 };
 
-export const DefaultAside = ({ isOpen = true, onClose, className = '' }) => {
+export const DefaultAside = ({
+	isOpen = true,
+	onClose,
+	className = ''
+}: DefaultAsideProps) => {
 	const { isDark } = useTheme();
 	const path = usePathname();
 	const { i18n } = useTranslation();
@@ -37,9 +27,22 @@ export const DefaultAside = ({ isOpen = true, onClose, className = '' }) => {
 	const segments = path.split("/").filter(Boolean);
 	const selected = segments[1] || "dashboard";
 	const [selectedId, setSelectedId] = useState(selected);
-	const [userPermissions, setUserPermissions] = useState([]);
+	const [userPermissions, setUserPermissions] = useState<string[]>([]);
 
-	// Load user permissions from localStorage
+	const menuPermissionsMap = {
+		dashboard: "dashboard:view",
+		accessLog: "access-logs:view",
+		reports: "daily-reports:view",
+		security: "incidents:view",
+		incident: "incidents:view",
+		configuration: "users:view",
+		employee: "employees:view",
+		user: "users:view",
+		vehicle: "vehicles:view",
+		role: "roles:view",
+		parameter: "permissions:view",
+	};
+
 	useEffect(() => {
 		try {
 			const permissions = JSON.parse(localStorage.getItem("permissions") || "[]");
@@ -50,24 +53,16 @@ export const DefaultAside = ({ isOpen = true, onClose, className = '' }) => {
 		}
 	}, []);
 
-	// Function to check if user has permission for a menu item
-	const hasPermission = (menuId) => {
-		// Special case: logout is always available
+	const hasPermission = (menuId: string) => {
 		if (menuId === 'logout') return true;
-
-		// If no permissions mapping exists for this menu item, hide it
 		if (!menuPermissionsMap[menuId]) return false;
-
-		// Check if user has the required permission
 		return userPermissions.includes(menuPermissionsMap[menuId]);
 	};
 
-	// Filter and translate menu items based on permissions
-	const filterAndTranslateMenu = (menu) => {
-		const newMenu = {};
+	const filterAndTranslateMenu = (menu: Record<string, any>) => {
+		const newMenu: Record<string, any> = {};
 
 		Object.entries(menu).forEach(([key, item]) => {
-			// Skip if user doesn't have permission
 			if (!hasPermission(key)) return;
 
 			const newItem = {
@@ -77,11 +72,9 @@ export const DefaultAside = ({ isOpen = true, onClose, className = '' }) => {
 			};
 
 			if (item.subMenu) {
-				const newSubMenu = {};
+				const newSubMenu: Record<string, any> = {};
 				Object.entries(item.subMenu).forEach(([subKey, subItem]) => {
-					// Skip submenu items user doesn't have permission for
 					if (!hasPermission(subKey)) return;
-
 					newSubMenu[subKey] = {
 						...subItem,
 						text: t(subItem.id),
@@ -89,12 +82,9 @@ export const DefaultAside = ({ isOpen = true, onClose, className = '' }) => {
 					};
 				});
 
-				// Only add subMenu if it has at least one permitted item
 				if (Object.keys(newSubMenu).length > 0) {
 					newItem.subMenu = newSubMenu;
 				} else if (!hasPermission(key)) {
-					// If no submenu items are permitted and the parent item depends on submenu items,
-					// skip the parent item too
 					return;
 				}
 			}
@@ -105,14 +95,13 @@ export const DefaultAside = ({ isOpen = true, onClose, className = '' }) => {
 		return newMenu;
 	};
 
-	// Process menus with permission filtering
 	const menuData = {
 		header: filterAndTranslateMenu(headerPageMenu),
 		main: filterAndTranslateMenu(PageMenu),
-		footer: filterAndTranslateMenu(footerPageMenu), // Logout should always be visible
+		footer: filterAndTranslateMenu(footerPageMenu),
 	};
 
-	const handleSelect = (id) => {
+	const handleSelect = (id: string) => {
 		setSelectedId(id);
 		if (window.innerWidth < 768) {
 			onClose();
@@ -131,3 +120,4 @@ export const DefaultAside = ({ isOpen = true, onClose, className = '' }) => {
 		/>
 	);
 };
+
