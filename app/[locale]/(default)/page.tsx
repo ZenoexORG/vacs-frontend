@@ -12,12 +12,20 @@ import { useT } from "../../i18n/useT";
 import { useEffect, useState } from "react";
 import DashboardAPI from "@hooks/dashboard/dashboard";
 
+interface StatItem {
+  title: string;
+  value: string;
+  percent: [string, 'up' | 'down'];
+  color: string;
+  icon: string;
+}
+
 export default function Page() {
   const { isDark } = useTheme();
   const { t } = useT('dashboard');
 
   const [data, setData] = useState([]);
-  const [stats, setStats] = useState([]);
+  const [stats, setStats] = useState<StatItem[]>([]);
 
   const [loadingStats, setLoadingStats] = useState(true);
   const [loadingChart, setLoadingChart] = useState(true);
