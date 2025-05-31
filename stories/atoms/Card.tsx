@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, forwardRef, Ref } from 'react';
 
 export interface CardProps {
   isDark?: boolean;
@@ -8,13 +8,17 @@ export interface CardProps {
   className?: string;
 }
 
-export const Card = ({
-  isDark = false,
-  children,
-  space = 0,
-  size = 'medium',
-  className,
-}: CardProps) => {
+// Usamos forwardRef para pasar ref al div interno
+export const Card = forwardRef<HTMLDivElement, CardProps>((
+  {
+    isDark = false,
+    children,
+    space = 0,
+    size = 'medium',
+    className,
+  },
+  ref: Ref<HTMLDivElement>
+) => {
   const color = isDark ? 'bg-dark-900' : 'bg-white-50';
 
   const sizes = {
@@ -24,8 +28,14 @@ export const Card = ({
   };
 
   return (
-    <div className={`${sizes[size]} ${color} rounded-lg flex flex-col ${className}`}>
+    <div
+      ref={ref}  // Aquí pasamos el ref
+      className={`${sizes[size]} ${color} rounded-lg flex flex-col ${className}`}
+    >
       {children}
     </div>
   );
-};
+});
+
+Card.displayName = "Card"; // para mejores mensajes en devtools y debugging
+
