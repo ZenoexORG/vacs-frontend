@@ -85,7 +85,7 @@ export default function Page() {
 
   const [showMonthSelector, setShowMonthSelector] = useState(false);
 
-  const handleMonthChange = (selectedMonth) => {
+  const handleMonthChange = (selectedMonth: number) => {
     setMonth(selectedMonth + 1); // +1 because array is 0-based but our API expects 1-12
     fetchData(selectedMonth + 1, year);
     fetchStats(selectedMonth + 1);
