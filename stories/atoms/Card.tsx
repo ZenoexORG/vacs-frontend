@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react';
 export interface CardProps {
   isDark?: boolean;
   children?: ReactNode;
+  space?: number;
   size?: 'small' | 'medium' | 'large';
   className?: string;
 }
@@ -10,6 +11,7 @@ export interface CardProps {
 export const Card = ({
   isDark = false,
   children,
+  space = 0,
   size = 'medium',
   className,
 }: CardProps) => {
