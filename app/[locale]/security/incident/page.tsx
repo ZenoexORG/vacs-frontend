@@ -4,7 +4,6 @@ import { Title } from "@atoms/Title";
 import { useTheme } from "@contexts/themeContext";
 import { useT } from "../../../i18n/useT";
 import { useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
 import IncidentsAPI from "@hooks/incidents/incidents";
 import { DefaultTicketSidebar } from "@components/DefaultTicketSidebar";
 import { IncidentTable } from "@organisms/IncidentList";
@@ -43,7 +42,7 @@ export default function Page() {
     }
   };
 
-  const addMessage = async (incidentId, message) => {
+  const addMessage = async (incidentId: any, message: string) => {
     setLoading(true);
 
     try {
@@ -67,7 +66,7 @@ export default function Page() {
     }
   }, [page]);
 
-  const handleIncidentClick = (incident) => {
+  const handleIncidentClick = (incident: any) => {
     setSelectedIncident(incident);
   };
 
@@ -75,12 +74,12 @@ export default function Page() {
     setSelectedIncident(null);
   };
 
-  const handleStatusChange = (newStatus) => {
+  const handleStatusChange = (newStatus: any) => {
     setLoading(true);
     setStatus(newStatus);
   };
 
-  const handlePriorityChange = (newPriority) => {
+  const handlePriorityChange = (newPriority: any) => {
     setLoading(true);
     setPriority(newPriority);
   };
