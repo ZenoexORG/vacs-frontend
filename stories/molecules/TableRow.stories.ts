@@ -29,32 +29,3 @@ const columns = [
   { key: 'userId', label: 'User ID' },
 ];
 
-export const Default: Story = {
-  args: {
-    data: {
-      id: '00001',
-      entryDate: '13:24 - 04 Sep 2024',
-      exitDate: '20:55 - 04 Sep 2024',
-      vehicleId: 'C48-F06',
-      type: 'Authorized',
-      userId: '1056763957',
-    },
-    columns,
-    isDark: false,
-  },
-};
-
-export const DarkMode: Story = {
-  args: {
-    data: {
-      id: '00002',
-      entryDate: '09:25 - 12 Jan 2026',
-      exitDate: '',
-      vehicleId: 'H65-O51',
-      type: 'Private',
-      userId: null,
-    },
-    columns,
-    isDark: true,
-  },
-};
