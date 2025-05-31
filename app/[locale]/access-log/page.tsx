@@ -8,11 +8,20 @@ import { useEffect, useState } from "react";
 import AccessLogAPI from "@hooks/access-log/accessLog";
 import { io, Socket } from "socket.io-client";
 
+interface AccessLogEntry {
+  id: number;
+  entry_date: string;
+  exit_date: string | null;
+  vehicle_id: string;
+  vehicle_type: 'authorized' | 'private' | 'visitor' | 'provider' | 'unregistered';
+  owner_id: string;
+}
+
 export default function AccessLog() {
   const { isDark } = useTheme();
   const { t } = useT('access_log');
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<AccessLogEntry[]>([]);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -63,7 +72,7 @@ export default function AccessLog() {
       transports: ["websocket"],
     });
 
-    socket.on("access_logs", (newLog) => {
+    socket.on("access_logs", (newLog: any) => {
       setData((prevData) => {
         let updatedData;
         const existingLogIndex = prevData.findIndex(log => log.id === newLog.data.id);
@@ -79,7 +88,7 @@ export default function AccessLog() {
       });
     });
 
-    socket.on("connect_error", (error) => {
+    socket.on("connect_error", (error: any) => {
       console.error("Error al conectar con el WebSocket:", error);
     });
 
