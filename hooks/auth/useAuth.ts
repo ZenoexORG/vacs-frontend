@@ -6,6 +6,9 @@ interface User {
 	role: string;
 }
 
+const languages = ['en', 'es'];
+const fallbackLng = 'es';
+
 export const useAuth = () => {
 	const [user, setUser] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
