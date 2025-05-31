@@ -8,12 +8,7 @@ import { useT } from '../../app/i18n/useT';
 
 export interface TableProps {
   data: any[];
-  columns: {
-    key: string;
-    label: string;
-    type?: 'text' | 'badge';
-    badgeColorMap?: Record<string, string>;
-  }[];
+  columns: any[];
   page?: number;
   total?: number;
   isDark?: boolean;
@@ -82,6 +77,6 @@ export const Table = ({
           rightAction={() => handlePageChange(page + 1)}
         />
       </div>
-    </div >
+    </div>
   );
 };
