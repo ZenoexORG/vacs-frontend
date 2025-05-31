@@ -8,7 +8,7 @@ export interface ButtonProps {
   type?: 'button' | 'submit';
   label?: string;
   children?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   isOutline?: boolean;
   className?: string;
 }
