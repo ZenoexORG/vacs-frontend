@@ -18,8 +18,8 @@ export default function AccessLog() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleDownload = async () => {
     setLoading(true);
@@ -67,7 +67,7 @@ export default function AccessLog() {
       } else {
         setError(t('noReportAvailable'));
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error downloading report:', err);
       setError(err.message || t('downloadError'));
     } finally {
@@ -87,7 +87,7 @@ export default function AccessLog() {
 
       await ReportAPI.generate(date);
       setSuccessMessage(t('generateSuccess'));
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || t('generateError'));
     } finally {
       setLoading(false);
