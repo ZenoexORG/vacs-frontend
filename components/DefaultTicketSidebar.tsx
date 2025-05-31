@@ -42,7 +42,7 @@ export const DefaultTicketSidebar = ({
 			setPriority={setPriority}
 			statusList={statusList}
 			priorityList={priorityList}
-			loading={loading}
+			isLoading={loading}
 		/>
 	);
 };
