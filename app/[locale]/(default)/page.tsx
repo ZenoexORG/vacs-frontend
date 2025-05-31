@@ -53,18 +53,18 @@ export default function Page() {
       const response = await DashboardAPI.stats(month, year);
       const rawStats = response.data;
 
-      const formattedStats = [
+      const formattedStats: StatItem[] = [
         {
           title: t('total_vehicles'),
           value: rawStats.entries.value.toLocaleString(),
-          percent: [`${rawStats.entries.percent[0]}%`, rawStats.entries.percent[1]],
+          percent: [`${rawStats.entries.percent[0]}%`, rawStats.entries.percent[1]] as [string, 'up' | 'down'],
           color: '#6226EF',
           icon: 'DirectionsCar',
         },
         {
           title: t('total_incidents'),
           value: rawStats.incidents.value.toLocaleString(),
-          percent: [`${rawStats.incidents.percent[0]}%`, rawStats.incidents.percent[1]],
+          percent: [`${rawStats.incidents.percent[0]}%`, rawStats.incidents.percent[1]] as [string, 'up' | 'down'],
           color: '#FFA756',
           icon: 'Error',
         },
