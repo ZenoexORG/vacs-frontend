@@ -3,7 +3,6 @@
 import { DualButton } from '../atoms/DualButton';
 import { TableRow } from '../molecules/TableRow';
 import React from 'react';
-import { Role } from '../../types/roles';
 import { useT } from '../../app/i18n/useT';
 
 export interface TableProps {
@@ -13,7 +12,7 @@ export interface TableProps {
   total?: number;
   isDark?: boolean;
   onEdit?: (item: any) => void;
-  onDelete?: (item: Role) => void;
+  onDelete?: (item: any) => void;
   onPageChange?: (page: number) => void;
 }
 
