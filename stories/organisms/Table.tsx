@@ -7,7 +7,7 @@ import { Role } from '../../types/roles';
 import { useT } from '../../app/i18n/useT';
 
 export interface TableProps {
-  data: Record<string, string | null>[];
+  data: any[];
   columns: {
     key: string;
     label: string;
