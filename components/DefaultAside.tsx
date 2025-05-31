@@ -14,6 +14,15 @@ type DefaultAsideProps = {
 	className?: string;
 };
 
+// Define la estructura de cada item de menú
+type MenuItem = {
+	id: string;
+	path: string;
+	subMenu?: Record<string, MenuItem>;
+	text?: string;
+	// Otros campos que existan en tus items, como iconos, etc.
+};
+
 export const DefaultAside = ({
 	isOpen = true,
 	onClose,
@@ -59,27 +68,32 @@ export const DefaultAside = ({
 		return permissionKey ? userPermissions.includes(permissionKey) : false;
 	};
 
-	const filterAndTranslateMenu = (menu: Record<string, any>) => {
-		const newMenu: Record<string, any> = {};
+	// Ahora el menu tiene tipo conocido, para que TS sepa que subItem es objeto
+	const filterAndTranslateMenu = (menu: Record<string, MenuItem>) => {
+		const newMenu: Record<string, MenuItem> = {};
 
 		Object.entries(menu).forEach(([key, item]) => {
 			if (!hasPermission(key)) return;
 
-			const newItem = {
+			const newItem: MenuItem = {
 				...item,
 				text: t(item.id),
 				path: item.path.replace(":locale", locale),
 			};
 
 			if (item.subMenu) {
-				const newSubMenu: Record<string, any> = {};
+				const newSubMenu: Record<string, MenuItem> = {};
 				Object.entries(item.subMenu).forEach(([subKey, subItem]) => {
 					if (!hasPermission(subKey)) return;
-					newSubMenu[subKey] = {
-						...subItem,
-						text: t(subItem.id),
-						path: subItem.path.replace(":locale", locale),
-					};
+
+					// Aquí nos aseguramos que subItem es objeto para usar spread
+					if (typeof subItem === 'object' && subItem !== null) {
+						newSubMenu[subKey] = {
+							...subItem,
+							text: t(subItem.id),
+							path: subItem.path.replace(":locale", locale),
+						};
+					}
 				});
 
 				if (Object.keys(newSubMenu).length > 0) {
