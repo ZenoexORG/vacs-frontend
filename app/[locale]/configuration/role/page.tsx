@@ -73,13 +73,13 @@ export default function Page() {
     try {
       const response = await PermissionAPI.list(1, 100);
       setPermissions(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching permissions', error);
     }
   };
 
   const handleEdit = (role: Role) => {
-    formData.setValues(role);
+    formData.setValues(role as any);
     setViewForm(true);
   };
 
