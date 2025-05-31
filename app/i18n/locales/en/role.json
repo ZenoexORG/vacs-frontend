@@ -1,0 +1,48 @@
+{
+  "create_role": "Create Role",
+  "roles": "Roles",
+  "add_new": "Add New",
+
+  "name": "Name",
+  "type": "Type",
+  "permissions": "Permissions",
+  "color": "Color",
+  "actions": "Actions",
+
+  "enter": "Enter",
+  "select": "Select",
+  "click_to": "Click to",
+
+  "submit": "Submit",
+  "cancel": "Cancel",
+
+  "permissions_manager": "Permissions Manager",
+
+  "modules": {
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "users": "Users",
+    "access-logs": "Access Logs",
+    "vehicles": "Vehicles",
+    "roles": "Roles",
+    "incidents": "Incidents",
+    "permissions": "Permissions",
+    "vehicle-types": "Vehicle Types",
+    "incident-messages": "Incident Messages",
+    "daily-reports": "Daily Reports",
+    "cameras": "Cameras"
+  },
+
+  "permission": {
+    "view": "View",
+    "edit": "edit",
+    "create": "Create",
+    "delete": "Delete",
+    "assign": "Assign",
+    "unassign": "Unassign"
+  },
+
+  "success": "Success",
+  "edit_success": "The role was edited successfully.",
+  "create_success": "The role was created successfully."
+}

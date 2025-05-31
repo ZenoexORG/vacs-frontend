@@ -1,0 +1,21 @@
+{
+  "reports": "Reports",
+  "downloadReports": "Download Reports",
+  "reportsDescription": "Here you can download generated reports or generate new ones.",
+  "singleDateReport": "Single Date Report",
+  "dateRangeReport": "Date Range Report",
+  "selectDate": "Select Date",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "downloadReport": "Download Report",
+  "generateReport": "Generate Report",
+  "downloading": "Downloading...",
+  "generating": "Generating...",
+  "downloadSuccess": "Report downloaded successfully",
+  "generateSuccess": "Report generated successfully",
+  "selectDateError": "Please select a date",
+  "selectDateRangeError": "Please select both start and end dates",
+  "downloadError": "Error downloading the report",
+  "generateError": "Error generating the report",
+  "noReportAvailable": "No report available for the selected date(s)"
+}

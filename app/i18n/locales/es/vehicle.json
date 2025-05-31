@@ -1,0 +1,24 @@
+{
+  "create_vehicle": "Crear Vehiculo",
+  "vehicles": "Vehiculos",
+  "add_new": "Agregar Nuevo",
+
+  "id": "Id",
+  "type": "Tipo",
+  "soat": "SOAT",
+  "user_id": "Cedula de Usuario",
+  "user_name": "Nombre de Usuario",
+  "actions": "Acciones",
+
+  "license_plate": "Placa",
+
+  "enter": "Ingresar",
+  "select": "Seleccionar",
+
+  "submit": "Enviar",
+  "cancel": "Cancelar",
+
+  "success": "Éxito",
+  "edit_success": "La edición del vehiculo fue exitosa.",
+  "create_success": "La creación del vehiculo fue exitosa."
+}

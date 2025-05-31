@@ -1,0 +1,10 @@
+{
+  "access_log": "Access Log",
+
+  "id": "Id",
+  "entry_date": "Entry Date",
+  "exit_date": "Exit Date",
+  "vehicle_id": "Vehicle Id",
+  "type": "Type",
+  "user_id": "User Id"
+}

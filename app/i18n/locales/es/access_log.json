@@ -1,0 +1,10 @@
+{
+  "access_log": "Registro de Acceso",
+
+  "id": "Id",
+  "entry_date": "Entrada",
+  "exit_date": "Salida",
+  "vehicle_id": "Placa",
+  "type": "Tipo",
+  "user_id": "Cedula de Usuario"
+}

@@ -1,0 +1,16 @@
+{
+  "incidents": "Incidentes",
+
+  "tickets": "Tiquetes",
+
+  "status": "Estado",
+
+  "open": "Abierto",
+  "closed": "Cerrado",
+
+  "priority": "Prioridad",
+
+  "high": "Alta",
+  "medium": "Media",
+  "low": "Baja"
+}

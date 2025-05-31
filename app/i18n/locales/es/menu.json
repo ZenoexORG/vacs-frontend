@@ -1,0 +1,14 @@
+{
+  "dashboard": "Dashboard",
+  "accessLog": "Acceso",
+  "reports": "Reportes",
+  "security": "Seguridad",
+  "incident": "Incidentes",
+  "configuration": "Configuración",
+  "employee": "Empleados",
+  "user": "Usuarios",
+  "vehicle": "Vehiculos",
+  "role": "Roles",
+  "parameter": "Parámetros",
+  "logout": "Salir"
+}

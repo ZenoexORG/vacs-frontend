@@ -1,0 +1,28 @@
+{
+  "create_user": "Create User",
+  "users": "Users",
+  "add_new": "Add New",
+
+  "id": "Id",
+  "name": "First Name",
+  "last_name": "Last Name",
+  "role": "Role",
+  "actions": "Actions",
+
+  "identification": "Identification",
+  "kind_id": "Identification Type",
+  "gender": "Gender",
+  "m": "Masculine",
+  "f": "Feminine",
+  "o": "Other",
+
+  "enter": "Enter",
+  "select": "Select",
+
+  "submit": "Submit",
+  "cancel": "Cancel",
+
+  "success": "Success",
+  "edit_success": "The user was edited successfully.",
+  "create_success": "The user was created successfully."
+}

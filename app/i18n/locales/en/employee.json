@@ -1,0 +1,30 @@
+{
+  "create_employee": "Create Employee",
+  "employees": "Employees",
+  "add_new": "Add New",
+
+  "id": "Id",
+  "username": "Username",
+  "name": "First Name",
+  "last_name": "Last Name",
+  "role": "Role",
+  "actions": "Actions",
+
+  "identification": "Identification",
+  "kind_id": "Identification Type",
+  "gender": "Gender",
+  "m": "Masculine",
+  "f": "Feminine",
+  "o": "Other",
+  "password": "Password",
+
+  "enter": "Enter",
+  "select": "Select",
+
+  "submit": "Submit",
+  "cancel": "Cancel",
+
+  "success": "Success",
+  "edit_success": "The employee was edited successfully.",
+  "create_success": "The employee was created successfully."
+}

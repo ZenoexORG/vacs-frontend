@@ -1,0 +1,16 @@
+{
+  "incidents": "Incidents",
+
+  "tickets": "Tickets",
+
+  "status": "Status",
+
+  "open": "Open",
+  "closed": "Closed",
+
+  "priority": "Priority",
+
+  "high": "High",
+  "medium": "Medium",
+  "low": "Low"
+}

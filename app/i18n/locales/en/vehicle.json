@@ -1,0 +1,24 @@
+{
+  "create_vehicle": "Create Vehicle",
+  "vehicles": "Vehicles",
+  "add_new": "Add New",
+
+  "id": "Id",
+  "type": "Type",
+  "soat": "Soat",
+  "user_id": "User Id",
+  "user_name": "User Name",
+  "actions": "Actions",
+
+  "license_plate": "License Plate",
+
+  "enter": "Enter",
+  "select": "Select",
+
+  "submit": "Submit",
+  "cancel": "Cancel",
+
+  "success": "Success",
+  "edit_success": "The vehicle was edited successfully.",
+  "create_success": "The vehicle was created successfully."
+}
